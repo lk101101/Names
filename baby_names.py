@@ -26,7 +26,6 @@ def main():
     past_file = 'yob' + year + '.txt'
     
     # create instances of NameReader class
-
     current_name = NameReader(current_file, name)
     past_name = NameReader(past_file, name)
     # get ranks from current and specified year
