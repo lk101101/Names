@@ -1,7 +1,7 @@
 # baby_names
 
 ## Overview
-The US Social Security Administration (SSA) publishes annual lists of baby names used during that year. This program processes the data from the most recent dataset (2020) and a specified birth year and compares the number of babies named with a specific name.\
+The US Social Security Administration (SSA) publishes annual lists of baby names used during that year. This program processes the data from the most recent dataset (2020) and a specified birth year and compares the number of babies named with a specific name.
 
 Example:\
 Input: (name year) -> emma 2010\
