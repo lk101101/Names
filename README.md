@@ -8,4 +8,4 @@ Output: The name EMMA was used 15581 times in 2020 and 17351 times in 2010
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
 
 ## TO DO
-Planning to do more interesting things with the data!
+Planning to do more interesting things with the code and data!
