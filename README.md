@@ -7,7 +7,9 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
 
-Example: Choosing p to return the popularity ranking of a name/
+Example:\
+Choosing p to return the popularity ranking of a name\
+
 Enter as name gender (m/f) year\
 Input: emma f 2010\
 Output: The girls' name EMMA was used 15581 times in 2020 and 17351 times in 2010
