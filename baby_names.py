@@ -46,7 +46,7 @@ def popularity():
     past_rank = past_name.ranking_of_name()
     if (cur_rank is None):
         cur_rank = 0
-    elif (past_rank is None):
+    if (past_rank is None):
         past_rank = 0
 
     print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
