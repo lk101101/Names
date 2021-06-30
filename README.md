@@ -3,7 +3,7 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 1. processes the data from the most recent dataset (2020) and the dataset from specified year
 2. prints number of babies named with specified name in specified year and current year
 3. displays a line graph visualizing the change in popularity from specified year to current year (choice 'p')
-4. returns a random name from a random year (choice 'r') with options to specify gender (m/f)
+4. returns a random name from a random year (choice 'r') with options to specify gender (m/f) and number of names to generate
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
 
