@@ -12,7 +12,7 @@ Choosing p to return the popularity ranking of a name
 
 Enter as name gender (m/f) year\
 Input: emma f 2010\
-Output: The girls' name EMMA was used 15581 times in 2020 and 17351 times in 2010
+Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 2010
 
 <img width="1149" alt="example_graph" src="https://user-images.githubusercontent.com/55768135/123728282-027b6280-d861-11eb-8a3b-0a50c28ecad2.png">
 
