@@ -126,13 +126,32 @@ def main():
 
     # random name generator
     elif answer.lower() == 'r':
-        rand_input = input("Specify a gender (m/f) or leave blank: ")
+        rand_input = input("Specify a gender (m/f), number of names to generate or leave blank: ")
 
-        # no gender selected
+        # if rand_input = empty, nothing specified
         if not rand_input:
             random_gen()
         else:
-            random_gen_gender(rand_input)
+            rand_input = rand_input.split(' ')
+            
+            # both gender and number are specified
+            if (len(rand_input) == 2):
+                gender = rand_input[0]
+                number = int(rand_input[1])
+                for num in range(0, number):
+                    random_gen_gender(gender)
+            
+            # only gender is specified
+            elif (rand_input[0] == 'f' or rand_input[0] == 'm'):
+                gender = rand_input[0]
+                random_gen_gender(gender)
+            
+            # only number is specified
+            else:
+                number = int(rand_input[0])
+                for num in range(0, int(number)):
+                    random_gen()
+
     else:
         print("Invalid choice. Choose either r for a random name or p for a name's popularity.")
     
