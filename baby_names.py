@@ -21,7 +21,8 @@ class NameReader():
         for i in self.raw_data:
             separated = i.split(',')
             if separated[1].lower() == self.gender.lower() and separated[0] == self.name:
-                return separated[2].strip('\n')
+                rank = separated[2].strip('\n')
+                return rank
 
 # create line graph to display change in ranking of name over time
 def viz(year_list, rank_list, name, year):
@@ -94,6 +95,10 @@ def main():
         # get ranks from current and specified year
         cur_rank = current_name.ranking_of_name()
         past_rank = past_name.ranking_of_name()
+        if (cur_rank is None):
+            cur_rank = 0
+        elif (past_rank is None):
+            past_rank = 0
 
         print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
