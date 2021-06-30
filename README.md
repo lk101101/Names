@@ -3,7 +3,7 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 1. processes the data from the most recent dataset (2020) and the dataset from specified year
 2. prints number of babies named with specified name in specified year and current year
 3. displays a line graph visualizing the change in popularity from specified year to current year (choice 'p')
-4. returns a random name from a random year (choice 'r')
+4. returns a random name from a random year (choice 'r') with options to specify gender (m/f)
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
 
@@ -20,4 +20,4 @@ Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 201
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
 
 ## TO DO
-Planning to implement a better version of the random name generator to include ways to specify gender and rank as well as include options to generate first and middle names.
+Planning to implement options to generate first and middle names. 
