@@ -2,6 +2,7 @@ import os
 import csv
 import random
 import matplotlib.pyplot as plt
+import argparse
 
 class NameReader():
     def __init__(self, filename, name, gender):
@@ -36,6 +37,40 @@ def viz(year_list, rank_list, name, year):
     plt.grid(True)
     plt.show()
 
+def random_gen():
+    # get random year + file
+    year = random.randrange(1880, 2020)
+    file_name = 'yob' + str(year) + '.txt'
+
+    # get random line and split into separate words
+    line = random.choice(open(file_name).readlines())
+    line = line.split(',')
+
+    # print year + name
+    print(str(year) + ": " + line[0])
+
+def random_gen_gender(gender):
+    # get random year + file
+    year = random.randrange(1880, 2020)
+    file_name = 'yob' + str(year) + '.txt'
+
+    found = False
+    random_name = " "
+
+    # loop until random name matches specified gender
+    while not found:
+        # get random line and split into separate words
+        line = random.choice(open(file_name).readlines())
+        line = line.split(',')
+        if line[1].lower() == gender.lower():
+            found = True
+            random_name = line[0]
+        else:
+            found = False
+
+    # print year + name
+    print(str(year) + ": " + random_name)
+
 def main():
     answer = input("Select an option: r to return a random name or p to return the popularity ranking of a name: ")
 
@@ -63,7 +98,6 @@ def main():
         print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
         # visualization code
-
         years = []
         ranks = []
         # gather the ranks for each year between the specified and current year
@@ -78,25 +112,20 @@ def main():
                 ranks.append(0)
             else:
                 ranks.append(int(new_rank))
-                
+
         viz(years, ranks, name, year)
 
     # random name generator
+    elif answer.lower() == 'r':
+        rand_input = input("Specify a gender (m/f) or leave blank: ")
+
+        # no gender selected
+        if not rand_input:
+            random_gen()
+        else:
+            random_gen_gender(rand_input)
     else:
-        # TO DO: 
-            # implement way to specify gender and rank
-
-        # get random year + file
-        year = random.randrange(1880, 2020)
-        file_name = 'yob' + str(year) + '.txt'
-
-        # get random line
-        line = random.choice(open(file_name).readlines())
-        # split line into words
-        line = line.split(',')
-
-        # print year + name
-        print(str(year) + " : " + line[0])
+        print("Invalid choice. Choose either r for a random name or p for a name's popularity.")
     
 if __name__ == '__main__':
     main()
