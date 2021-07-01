@@ -21,21 +21,17 @@ class NameReader():
         for i in self.raw_data:
             separated = i.split(',')
             if separated[1].lower() == self.gender.lower() and separated[0] == self.name:
-                rank = separated[2].strip('\n')
-                return rank
+                return separated[2].strip('\n')
+        return 0
 
 def popularity():
     name,gender, year = input("Find out how many babies are named a certain name in a specific year. Format as 'name gender (m/f) year': ").split()
     name = name.capitalize()
 
     current_file = 'yob2020.txt'
-    past_file = 'yob' + year + '.txt'
+    past_file = 'yob%s.txt' % year
 
-    full_gender = ""
-    if (gender.lower() == 'f'):
-        full_gender = "girls'"
-    else:
-        full_gender = "boys'"
+    full_gender = "girls'" if gender.lower() == 'f' else "boys'" 
     
     # create instances of NameReader class
     current_name = NameReader(current_file, name, gender)
@@ -44,10 +40,6 @@ def popularity():
     # get ranks from current and specified year
     cur_rank = current_name.ranking_of_name()
     past_rank = past_name.ranking_of_name()
-    if (cur_rank is None):
-        cur_rank = 0
-    if (past_rank is None):
-        past_rank = 0
 
     print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
@@ -57,7 +49,7 @@ def popularity():
     # gather the ranks for each year between the specified and current year
     for i in range(int(year), 2021):
         years.append(str(i))
-        new_file = 'yob' + str(i) + '.txt'
+        new_file = 'yob%s.txt' % str(i)
         new_name = NameReader(new_file, name, gender)
         new_rank = new_name.ranking_of_name()
 
@@ -71,7 +63,7 @@ def popularity():
 
 # create line graph to display change in ranking of name over time
 def viz(year_list, rank_list, name, year):
-    # change color of line here 
+    # *change color of line here*
     plt.plot(year_list, rank_list, color = 'deepskyblue', marker = 'o')
     plt.ylabel('Popularity')
     plt.xlabel('Years')
@@ -116,22 +108,23 @@ def random_name_generator():
 def random_gen():
     # get random year + file
     year = random.randrange(1880, 2020)
-    file_name = 'yob' + str(year) + '.txt'
+    year = str(year)
+    file_name = 'yob%s.txt' % year
 
     # get random line and split into separate words
     line = random.choice(open(file_name).readlines())
     line = line.split(',')
 
-    # print year + name
-    print(str(year) + ": " + line[0])
+    # print line[2] for number of babies named this name
+    print(year + ": " + line[1] + " " + line[0])
 
 def random_gen_gender(gender):
     # get random year + file
     year = random.randrange(1880, 2020)
-    file_name = 'yob' + str(year) + '.txt'
+    year = str(year)
+    file_name = 'yob%s.txt' % year
 
     found = False
-    random_name = " "
 
     # loop until random name matches specified gender
     while not found:
@@ -140,12 +133,10 @@ def random_gen_gender(gender):
         line = line.split(',')
         if line[1].lower() == gender.lower():
             found = True
-            random_name = line[0]
+            # print line[2] for number of babies named this name
+            print(year + ": " + line[1] + " " + line[0])
         else:
             found = False
-
-    # print year + name
-    print(str(year) + ": " + random_name)
 
 def main():
     answer = input("Select an option: r to return a random name or p to return the popularity ranking of a name: ")
