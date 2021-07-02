@@ -7,27 +7,25 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 5. prints information about a given name from BabyNames.com (choice 'm')
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
+For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
 
-Example:\
-*Choosing r to return a random word*
-"Specify a gender (m/f), number of names to generate or leave blank:"\
-Input: f
-Output: 2010: F Emma\
+## Choice r: return a random word
+"Specify a gender (m/f), number of names to generate or leave blank"\
+Input: f\
+Output: 2010: F Emma
 
-*Choosing p to return the popularity ranking of a name*
+## Choice p: return the popularity ranking of a name
 "Enter as name gender (m/f) year"\
 Input: emma f 2010\
 Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 2010
 
 <img width="1149" alt="example_graph" src="https://user-images.githubusercontent.com/55768135/123728282-027b6280-d861-11eb-8a3b-0a50c28ecad2.png">
 
-*Choosing m to return information about a name*
+## Choice m: return information about a name
 "Enter a name to return its origin and meaning"\
-Input: emma
+Input: emma\
 Output: info scraped from BabyNames.com
 
 
-For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
-
 ## TO DO
-Planning to implement options to generate first and middle names. 
+Planning to implement options to generate full names including last names.
