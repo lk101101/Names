@@ -11,12 +11,20 @@ For all of the annual datasets (ranging all the way to 1880), download 'National
 
 For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ names.
 
-## Choice r: return a random word
+# Examples
+
+## Choice r: return random names
 "Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name"\
-Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in code.\
+Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in code.
 
 Input: f\
 Output: 2010: F Emma
+
+Input: f s\
+Output: 2010: F Emma Smith
+
+Input: s\
+Output: Smith
 
 ## Choice p: return the popularity ranking of a name
 "Enter as name gender (m/f) year"\
@@ -32,4 +40,5 @@ Output: info scraped from BabyNames.com
 
 
 ## TO DO
-Planning to implement options to generate full names including last names and implement better command line argument handling for random name generator feature. 
+* implement options to generate full names including last names
+* implement better command line argument handling for random name generator feature. 
