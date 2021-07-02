@@ -10,8 +10,9 @@ Currently, the only options for gender are male (m) and female (f) so retrieving
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
 
 ## Choice r: return a random word
-"Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name"
-Note: inputs must be in order gender, number, surname even if not all parameters are included. More examples in code./
+"Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name"\
+Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in code.\
+
 Input: f\
 Output: 2010: F Emma
 
@@ -29,4 +30,4 @@ Output: info scraped from BabyNames.com
 
 
 ## TO DO
-Planning to implement options to generate full names including last names.
+Planning to implement options to generate full names including last names and implement better command line argument handling for random name generator feature. 
