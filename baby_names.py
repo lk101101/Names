@@ -161,25 +161,29 @@ def main():
         print("** Info about the Name {} from BabyNames.com **".format(name.capitalize()))
         # get origin and meaning
         get_origin = soup.find_all('div', {"class":"name-meaning"})
-        origin = get_origin[1].text
-        print(origin.strip() + '\n')
+        
+        if not get_origin:
+            print("There is no information about {} on BabyNames.com.".format(name.capitalize()))
+        else:
+            origin = get_origin[1].text
+            print(origin.strip() + '\n')
 
-        line_breaks = soup.find_all('br')        
-        for x in line_breaks:
-            x.replaceWith('')
+            line_breaks = soup.find_all('br')        
+            for x in line_breaks:
+                x.replaceWith('')
 
-        meaning_class = soup.find('div', {"class": "stats"})
-        full_meaning = meaning_class.get_text().split(". ")
+            meaning_class = soup.find('div', {"class": "stats"})
+            full_meaning = meaning_class.get_text().split(". ")
 
-        # splice list to not include lists 'people who like the name x also like', etc.
-        for meaning in full_meaning[: -1]:
-            meaning = meaning.strip('\n')
-            if meaning:
-               sentence = meaning.strip('\n')
-               sentence = sentence.strip()               
-               print(sentence)
-               # delete the newline below to print everything in one chunk of text
-               print("\n")
+            # splice list to not include lists 'people who like the name x also like', etc.
+            for meaning in full_meaning[: -1]:
+                meaning = meaning.strip('\n')
+                if meaning:
+                    sentence = meaning.strip('\n')
+                    sentence = sentence.strip()               
+                    print(sentence)
+                    # delete the newline below to print everything in one chunk of text
+                    print("\n")
     
     else:
         print("Invalid choice. Choose r for a random name, p for a name's popularity, or m for a name's meaning.")
