@@ -3,6 +3,9 @@ import csv
 import random
 import matplotlib.pyplot as plt
 import argparse
+from bs4 import BeautifulSoup
+import requests
+
 
 class NameReader():
     def __init__(self, filename, name, gender):
@@ -139,7 +142,7 @@ def random_gen_gender(gender):
             found = False
 
 def main():
-    answer = input("Select an option: r to return a random name or p to return the popularity ranking of a name: ")
+    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, or m to return details about a name: ")
 
     if answer.lower() == 'p':
         popularity()
@@ -147,8 +150,39 @@ def main():
     elif answer.lower() == 'r':
         random_name_generator()
 
+    elif answer.lower() == 'm':
+        # meaning / history of name
+        name = input("Enter a name to return its origin and meaning: ")
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
+        r = requests.get("https://babynames.com/name/" + name, headers=headers)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        
+        print("\n")
+        print("** Info about the Name {} from BabyNames.com **".format(name.capitalize()))
+        # get origin and meaning
+        get_origin = soup.find_all('div', {"class":"name-meaning"})
+        origin = get_origin[1].text
+        print(origin.strip() + '\n')
+
+        line_breaks = soup.find_all('br')        
+        for x in line_breaks:
+            x.replaceWith('')
+
+        meaning_class = soup.find('div', {"class": "stats"})
+        full_meaning = meaning_class.get_text().split(". ")
+
+        # splice list to not include lists 'people who like the name x also like', etc.
+        for meaning in full_meaning[: -1]:
+            meaning = meaning.strip('\n')
+            if meaning:
+               sentence = meaning.strip('\n')
+               sentence = sentence.strip()               
+               print(sentence)
+               # delete the newline below to print everything in one chunk of text
+               print("\n")
+    
     else:
-        print("Invalid choice. Choose either r for a random name or p for a name's popularity.")
+        print("Invalid choice. Choose r for a random name, p for a name's popularity, or m for a name's meaning.")
     
 if __name__ == '__main__':
     main()
