@@ -1,5 +1,6 @@
 import os
 import csv
+import codecs
 import random
 import matplotlib.pyplot as plt
 import argparse
@@ -80,35 +81,90 @@ def viz(year_list, rank_list, name, year):
 
 
 # ** Option r: random name generator **
-def random_name_generator():
-    rand_input = input("Specify a gender (m/f), number of names to generate or leave blank: ")
+# TO DO: implement better command line handling
 
-    # if rand_input = empty, nothing specified
+"""
+Examples of valid inputs:
+(blank) -> a random first name
+m / f   -> a random name of specified gender
+2       -> 2 random first names
+f s     -> a random first and last name
+2 s     -> prints two random last names
+f 2     -> two random first names of specified gender
+f 2 s   -> two random first names of specified gender and two random last names
+"""
+def random_name_generator():
+    rand_input = input("Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name: ")
+    surname = False
+    # ** nothing specified
     if not rand_input:
-        random_gen()
+        random_gen(surname)
     else:
         rand_input = rand_input.split(' ')
-         
-        # both gender and number are specified
-        if (len(rand_input) == 2):
+        
+        # ** all 2 inputs - gender, number and surname 
+        if len(rand_input) == 3:
             gender = rand_input[0]
             number = int(rand_input[1])
+            surname = True
             for num in range(0, number):
-                random_gen_gender(gender)
-            
-        # only gender is specified
-        elif (rand_input[0] == 'f' or rand_input[0] == 'm'):
-            gender = rand_input[0]
-            random_gen_gender(gender)
-            
-        # only number is specified
+                random_specific_gender(gender, surname)
+        
+        # ** if only 2 things are specified - determine if gender, number and/or surname
+        elif len(rand_input) == 2:
+            gender = False
+            number = False
+            first = rand_input[0]
+            second = rand_input[1]
+
+            # gender specified
+            if (first == 'f' or first == 'm'):
+                gender = True
+                gender = first
+            # number and surname
+            elif (first.isnumeric()):
+                number = True
+                number = int(first)
+                for num in range(0, number):
+                    sur = random_surname()
+                    print(sur)
+            # gender and number
+            if (gender and second.isnumeric()):
+                number = int(second)
+                for num in range(0, number):
+                    random_specific_gender(gender, surname)
+            # gender and surname
+            elif (gender and second == 's'):
+                surname = True
+                random_specific_gender(gender, surname)
+       
+        # ** one input
         else:
-            number = int(rand_input[0])
-            for num in range(0, int(number)):
-                random_gen()
+            first = rand_input[0]
+            # gender
+            if (first == 'f' or first == 'm'):
+                random_specific_gender(first, surname)
+            # number
+            elif first.isnumeric():
+                number = int(first)
+                for num in range(0, number):
+                    random_gen(surname)
+            # surname
+            else:
+                sur = random_surname()
+                print(sur)
 
 
-def random_gen():
+def random_surname():
+    with open("2010CensusSurnames.csv") as f:
+        reader = csv.reader(f)
+        surnames = list(reader)
+        random_line = random.choice(surnames)
+        sur = random_line[0].lower()
+        return sur.capitalize()   
+
+
+def random_gen(surname):
     # get random year + file
     year = random.randrange(1880, 2020)
     year = str(year)
@@ -119,9 +175,13 @@ def random_gen():
     line = line.split(',')
 
     # print line[2] for number of babies named this name
-    print(year + ": " + line[1] + " " + line[0])
+    print(year + ": " + line[1] + " " + line[0] + " ")
+    if (surname):
+        sur = random_surname()
+        print(sur)
 
-def random_gen_gender(gender):
+
+def random_specific_gender(gender, surname):
     # get random year + file
     year = random.randrange(1880, 2020)
     year = str(year)
@@ -137,7 +197,12 @@ def random_gen_gender(gender):
         if line[1].lower() == gender.lower():
             found = True
             # print line[2] for number of babies named this name
-            print(year + ": " + line[1] + " " + line[0])
+            result = year + ": " + line[1] + " " + line[0]
+            if (surname):
+                sur = random_surname()
+                result += " " + sur
+            print(result)
+
         else:
             found = False
 
@@ -176,14 +241,12 @@ def main():
             full_meaning = meaning_class.get_text().split(". ")
 
             # splice list to not include lists 'people who like the name x also like', etc.
-            for meaning in full_meaning[: -1]:
+            for meaning in full_meaning:
                 meaning = meaning.strip('\n')
                 if meaning:
                     sentence = meaning.strip('\n')
                     sentence = sentence.strip()               
                     print(sentence)
-                    # delete the newline below to print everything in one chunk of text
-                    print("\n")
     
     else:
         print("Invalid choice. Choose r for a random name, p for a name's popularity, or m for a name's meaning.")
