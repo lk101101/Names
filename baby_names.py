@@ -28,6 +28,7 @@ class NameReader():
                 return separated[2].strip('\n')
         return 0
 
+# Parses command line inputs, returns data for inputted name, and creates a visualization
 def popularity():
     name,gender, year = input("Find out how many babies are named a certain name in a specific year. Format as 'name gender (m/f) year': ").split()
     name = name.capitalize()
@@ -47,7 +48,8 @@ def popularity():
 
     print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
-    # visualization code
+    # ** visualization code **
+    
     years = []
     ranks = []
     # gather the ranks for each year between the specified and current year
@@ -65,7 +67,7 @@ def popularity():
 
     viz(years, ranks, name, year)
 
-# create line graph to display change in ranking of name over time
+# Creates line graph to display change in ranking of name over time
 def viz(year_list, rank_list, name, year):
     # *change color of line here*
     plt.plot(year_list, rank_list, color = 'deepskyblue', marker = 'o')
@@ -85,14 +87,15 @@ def viz(year_list, rank_list, name, year):
 
 """
 Examples of valid inputs:
-(blank) -> a random first name
+(blank) -> a random first name of any gender
 m / f   -> a random name of specified gender
-2       -> 2 random first names
+2       -> 2 random first names of any gender
 f s     -> a random first and last name
-2 s     -> prints two random last names
-f 2     -> two random first names of specified gender
-f 2 s   -> two random first names of specified gender and two random last names
+2 s     -> 2 random last names
+f 2     -> 2 random first names of specified gender (in this case, female)
+f 2 s   -> 2 random first names of specified gender (female) and two random last names
 """
+# Parses command line inputs for random name generator and calls specific functions
 def random_name_generator():
     rand_input = input("Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name: ")
     surname = False
@@ -102,7 +105,7 @@ def random_name_generator():
     else:
         rand_input = rand_input.split(' ')
         
-        # ** all 2 inputs - gender, number and surname 
+        # ** all 3 inputs provided - gender, number and surname 
         if len(rand_input) == 3:
             gender = rand_input[0]
             number = int(rand_input[1])
@@ -154,7 +157,7 @@ def random_name_generator():
                 sur = random_surname()
                 print(sur)
 
-
+# Gets a random surname from the surname CSV file
 def random_surname():
     with open("2010CensusSurnames.csv") as f:
         reader = csv.reader(f)
@@ -163,7 +166,7 @@ def random_surname():
         sur = random_line[0].lower()
         return sur.capitalize()   
 
-
+# Gets a random name (+ surname if specified), NO specified gender
 def random_gen(surname):
     # get random year + file
     year = random.randrange(1880, 2020)
@@ -174,13 +177,14 @@ def random_gen(surname):
     line = random.choice(open(file_name).readlines())
     line = line.split(',')
 
-    # print line[2] for number of babies named this name
+    # note: print line[2] for number of babies named this name
     print(year + ": " + line[1] + " " + line[0] + " ")
+    
     if (surname):
         sur = random_surname()
         print(sur)
 
-
+# Gets random name (+ surname if specified), specified gender
 def random_specific_gender(gender, surname):
     # get random year + file
     year = random.randrange(1880, 2020)
@@ -196,8 +200,9 @@ def random_specific_gender(gender, surname):
         line = line.split(',')
         if line[1].lower() == gender.lower():
             found = True
-            # print line[2] for number of babies named this name
+            # note: print line[2] for number of babies named this name
             result = year + ": " + line[1] + " " + line[0]
+            
             if (surname):
                 sur = random_surname()
                 result += " " + sur
@@ -216,7 +221,8 @@ def main():
         random_name_generator()
 
     elif answer.lower() == 'm':
-        # meaning / history of name
+        # Gets meaning and origin of a name using information from BabyNames.com
+        
         name = input("Enter a name to return its origin and meaning: ")
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
         r = requests.get("https://babynames.com/name/" + name, headers=headers)
@@ -224,15 +230,19 @@ def main():
         
         print("\n")
         print("** Info about the Name {} from BabyNames.com **".format(name.capitalize()))
-        # get origin and meaning
-        get_origin = soup.find_all('div', {"class":"name-meaning"})
         
+        get_origin = soup.find_all('div', {"class":"name-meaning"})
+       
         if not get_origin:
             print("There is no information about {} on BabyNames.com.".format(name.capitalize()))
         else:
+            # prints origin + meaning of name
             origin = get_origin[1].text
             print(origin.strip() + '\n')
-
+            
+            # gets detailed description of name from webpage
+            
+            # replace line breaks (/br) from text
             line_breaks = soup.find_all('br')        
             for x in line_breaks:
                 x.replaceWith('')
@@ -240,7 +250,7 @@ def main():
             meaning_class = soup.find('div', {"class": "stats"})
             full_meaning = meaning_class.get_text().split(". ")
 
-            # splice list to not include lists 'people who like the name x also like', etc.
+            # note: difficult to remove all random newlines because each name page is formatted differently
             for meaning in full_meaning:
                 meaning = meaning.strip('\n')
                 if meaning:
