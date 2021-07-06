@@ -30,42 +30,54 @@ class NameReader():
 
 # Parses command line inputs, returns data for inputted name, and creates a visualization
 def popularity():
-    name,gender, year = input("Find out how many babies are named a certain name in a specific year. Format as 'name gender (m/f) year': ").split()
-    name = name.capitalize()
+    try:
+        name,gender,year = input("Find out how many babies are named a certain name in a specific year. Format as 'name gender (m/f) year (>1880)': ").split()
 
-    current_file = 'yob2020.txt'
-    past_file = 'yob%s.txt' % year
+        name = name.capitalize()
 
-    full_gender = "girls'" if gender.lower() == 'f' else "boys'" 
-    
-    # create instances of NameReader class
-    current_name = NameReader(current_file, name, gender)
-    past_name = NameReader(past_file, name, gender)
-    
-    # get ranks from current and specified year
-    cur_rank = current_name.ranking_of_name()
-    past_rank = past_name.ranking_of_name()
+        current_file = 'yob2020.txt'
+        past_file = 'yob%s.txt' % year
 
-    print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
-
-    # ** visualization code **
-    
-    years = []
-    ranks = []
-    # gather the ranks for each year between the specified and current year
-    for i in range(int(year), 2021):
-        years.append(str(i))
-        new_file = 'yob%s.txt' % str(i)
-        new_name = NameReader(new_file, name, gender)
-        new_rank = new_name.ranking_of_name()
-
-    # if name isn't in file, use 0 as rank
-        if (new_rank == None):
-            ranks.append(0)
+        if gender.lower() == 'f':
+            full_gender = "girls"
+        elif gender.lower() == 'm':
+            full_gender = "boys"
+        # invalid gender
         else:
-            ranks.append(int(new_rank))
+            exit()
+    
+        # create instances of NameReader class
+        current_name = NameReader(current_file, name, gender)
+        past_name = NameReader(past_file, name, gender)
+    
+        # get ranks from current and specified year
+        cur_rank = current_name.ranking_of_name()
+        past_rank = past_name.ranking_of_name()
 
-    viz(years, ranks, name, year)
+        print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
+
+        # ** visualization code **
+    
+        years = []
+        ranks = []
+        # gather the ranks for each year between the specified and current year
+        for i in range(int(year), 2021):
+            years.append(str(i))
+            new_file = 'yob%s.txt' % str(i)
+            new_name = NameReader(new_file, name, gender)
+            new_rank = new_name.ranking_of_name()
+
+        # if name isn't in file, use 0 as rank
+            if (new_rank == None):
+                ranks.append(0)
+            else:
+                ranks.append(int(new_rank))
+
+        viz(years, ranks, name, year)
+    
+    except:
+        print("\nERROR: Too few inputs or invalid inputs.\nFormat your query as |name gender year|.\nGender must be either m or f. Year must be between 1880 and 2020.\n")
+    
 
 # Creates line graph to display change in ranking of name over time
 def viz(year_list, rank_list, name, year):
@@ -104,45 +116,50 @@ def random_name_generator():
         random_gen(surname)
     else:
         rand_input = rand_input.split(' ')
+        length = len(rand_input)
         
         # ** all 3 inputs provided - gender, number and surname 
-        if len(rand_input) == 3:
+        if length == 3 and rand_input[2] == 's':
             gender = rand_input[0]
             number = int(rand_input[1])
             surname = True
             for num in range(0, number):
                 random_specific_gender(gender, surname)
         
-        # ** if only 2 things are specified - determine if gender, number and/or surname
-        elif len(rand_input) == 2:
-            gender = False
-            number = False
+        # ** 2 inputs provided
+        # determine if number + surname, gender + surname, or gender + number
+        elif length == 2:
             first = rand_input[0]
             second = rand_input[1]
 
-            # gender specified
-            if (first == 'f' or first == 'm'):
-                gender = True
-                gender = first
             # number and surname
-            elif (first.isnumeric()):
-                number = True
+            if (first.isnumeric() and second == 's'):
                 number = int(first)
                 for num in range(0, number):
                     sur = random_surname()
                     print(sur)
-            # gender and number
-            if (gender and second.isnumeric()):
-                number = int(second)
-                for num in range(0, number):
-                    random_specific_gender(gender, surname)
-            # gender and surname
-            elif (gender and second == 's'):
-                surname = True
-                random_specific_gender(gender, surname)
+
+            # gender specified
+            elif (first == 'f' or first == 'm'):
+                gender = first
+                # gender and number
+                if (second.isnumeric()):
+                    number = int(second)
+                    for num in range(0, number):
+                        random_specific_gender(gender, surname)
+                # gender and surname
+                elif (second == 's'):
+                    surname = True
+                    random_specific_gender(gender, surname)   
+                # ERROR: gender is specified, but invalid second input
+                else:
+                    print("\nERROR: You specified gender (m/f) but your second input is invalid.\nInput a digit x (>1) to generate x number of names or s to generate a random surname.\n")
+            # ERROR
+            else:
+                print("\nERROR: You provided at least one invalid input.\nRemember to specify a gender (m/f), use digits to print a certain number of names, or use the letter s to generate a random surname.\n")        
        
         # ** one input
-        else:
+        elif length == 1:
             first = rand_input[0]
             # gender
             if (first == 'f' or first == 'm'):
@@ -153,9 +170,14 @@ def random_name_generator():
                 for num in range(0, number):
                     random_gen(surname)
             # surname
-            else:
+            elif (first == 's'):
                 sur = random_surname()
                 print(sur)
+            # ERROR
+            else:
+                print("\nERROR: You provided a single invalid input.\nRemember to specify a gender (m/f), use digits to print a certain number of names, or use the letter s to generate a random surname.\n")
+        else:
+            print("\nERROR: You may have provided too many inputs (>3) or one of your inputs is invalid.\nRemember to specify a gender (m/f), use digits to print a certain number of names, or use the letter s to generate a random surname.\n")
 
 # Gets a random surname from the surname CSV file
 def random_surname():
