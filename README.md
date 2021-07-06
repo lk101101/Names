@@ -9,13 +9,13 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
 
-For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ names.
+For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ surnames.
 
 # Examples
 
 ## Choice r: return random names
 "Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name"\
-Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in code.
+Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in the code.
 
 Input: f\
 Output: 2010: F Emma
@@ -36,9 +36,11 @@ Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 201
 ## Choice m: return information about a name
 "Enter a name to return its origin and meaning"\
 Input: emma\
-Output: info scraped from BabyNames.com
+Output: info scraped from BabyNames.com webpage for the name Emma
 
 
 ## TO DO
-* implement options to generate full names including last names
-* implement better command line argument handling for random name generator feature. 
+random name generator:
+* implement better command line argument handling
+* allow for more search criteria such as name length, initial, certain level of popularity, etc.
+* return random full names (first, middle, last)
