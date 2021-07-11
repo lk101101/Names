@@ -38,6 +38,8 @@ Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 201
 Input: emma\
 Output: info scraped from BabyNames.com webpage for the name Emma
 
+# How to Download and Run Code
+In your Terminal, navigate to your preferred directory. Next, type or copy and paste ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory. Navigate to the new folder, named Names. Enter ' python baby_names.py ' to run the code. 
 
 ## TO DO
 random name generator:
