@@ -2,8 +2,8 @@
 
 ## Overview
 The US Social Security Administration (SSA) publishes annual lists of baby names used during that year. This program can:
-1. process the data from the most recent dataset (2020) and the dataset from specified year
-2. print number of babies named with specified name in specified year and current year
+1. process the data from the most recent SSA dataset (2020) and the dataset from specified year (choice 'p')
+2. print number of babies named with specified name in specified year and current year (choice 'p')
 3. display a line graph visualizing the change in popularity from specified year to current year (choice 'p')
 4. return a random first and/or last name from a random year (choice 'r') with options to specify gender (m/f) and number of names to generate
 5. print information about a given name from BabyNames.com (choice 'm')
@@ -47,4 +47,4 @@ In your Terminal, navigate to your preferred directory. Next, type or copy and p
 random name generator:
 * implement better command line argument handling
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
-* return random full names (first, middle, last)
+* web scraping BabyNames.com is a bit messy, so replace with another baby name website
