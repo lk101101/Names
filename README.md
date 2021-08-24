@@ -42,11 +42,11 @@ Output: info scraped from BabyNames.com webpage for the name Emma
 
 ## Choice s: save favorite names to CSV file and print all names
 "Enter a name in format 'name gender'py to save it or enter 'print' to return your favorite names so far"\
-Input (save name): emma f
+Input (save name): emma f\
 Output: Saved!/
 
-Input (print names): print
-Output: Emma, f
+Input (print names): print\
+Output: Emma, f\
 
 Note: This feature uses the CSV file 'Fav_Names.csv'
 
