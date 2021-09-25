@@ -6,8 +6,7 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 2. print number of babies named with specified name in specified year and current year (choice 'p')
 3. display a line graph visualizing the change in popularity from specified year to current year (choice 'p')
 4. return a random first and/or last name from a random year (choice 'r') with options to specify gender (m/f) and number of names to generate
-5. print information about a given name from BabyNames.com (choice 'm')
-6. save favorite names to CSV file and print all names from file (choice 's')
+5. save favorite names to CSV file and print all names from file (choice 's')
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
@@ -52,4 +51,4 @@ In your Terminal, navigate to your preferred directory. Next, type or copy and p
 ## TO DO
 * implement better command line argument handling
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
-* implement web-scraping 
+* implement web-scraping to scrape and output the meanings and history of names
