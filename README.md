@@ -19,7 +19,7 @@ For full list of surnames from 2010 Census, download the Excel file on https://w
 
 ## Choice r: return random names
 "Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name"\
-Note: inputs must be in the order |gender, number, surname| even if not all parameters are included. See more examples in the code.
+Note: inputs must be in the order |gender | number | surname| even if not all parameters are included. See more examples in the code.
 
 Input: f\
 Output: 2010: F Emma
@@ -34,7 +34,7 @@ Output: Smith
 "Enter a name and gender to return its origin and meaning: "
 
 Input: emma f\
-Output: The name Emma is a girl's name of German origin meaning "universal"...
+Output: The name Emma is a girl's name of German origin meaning "universal"... (full description scraped from NameBerry.com)
 
 Note: sometimes requires two tries to receive information for a name
 
