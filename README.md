@@ -1,4 +1,5 @@
 # Try it out on Replit: https://replit.com/@lk101/Names#main.py
+## Note: only includes random name generator (choice 'r') and popularity stats without the visualization (choice 'p')
 
 ## Overview
 The US Social Security Administration (SSA) publishes annual lists of baby names used during that year. This program can:
