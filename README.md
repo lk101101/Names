@@ -36,11 +36,6 @@ Output: The girls' name Emma was used 15581 times in 2020 and 17351 times in 201
 
 <img width="1149" alt="example_graph" src="https://user-images.githubusercontent.com/55768135/123728282-027b6280-d861-11eb-8a3b-0a50c28ecad2.png">
 
-## Choice m: return information about a name
-"Enter a name to return its origin and meaning"\
-Input: emma\
-Output: info scraped from BabyNames.com webpage for the name Emma
-
 ## Choice s: save favorite names to CSV file and print all names
 "Enter a name in format 'name gender'py to save it or enter 'print' to return your favorite names so far"\
 Input (save name): emma f\
@@ -57,4 +52,4 @@ In your Terminal, navigate to your preferred directory. Next, type or copy and p
 ## TO DO
 * implement better command line argument handling
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
-* web scraping BabyNames.com is a bit messy, so replace with another baby name website
+* implement web-scraping 
