@@ -5,7 +5,7 @@ import codecs
 import random
 import matplotlib.pyplot as plt
 import argparse
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
@@ -234,7 +234,31 @@ def random_specific_gender(gender, surname):
 
         else:
             found = False
-      
+
+
+# * Gets meaning and origin of a name using information from NameBerry.com
+def name_meaning():
+    name, gender = input("Enter a name and gender to return its origin and meaning: ").split()
+    if (gender.lower() == 'm'):
+        gender = "boy"
+    else:
+        gender = "girl"
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
+    r = requests.get("https://nameberry.com/babyname/" + name + "/" + gender, headers=headers)
+    soup = BeautifulSoup(r.text, 'html.parser')
+        
+    print("** {} **".format(name.capitalize()))
+        
+    meaning = soup.find_all('div', {"class":"t-copy"})
+
+    if not meaning:
+       print("There is no information about {} on BabyNames.com.".format(name.capitalize()))
+        
+    else:
+        for sentence in meaning:
+            print(sentence.text)
+       
 
 # * Saves favorite names in csv file or prints list of favorite names
 def fav_names_file():
@@ -268,15 +292,17 @@ def fav_names_file():
 
 
 def main():
-    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, or s to save a favorite name: ")
+    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, m to return details about a name, or s to save a favorite name: ")
     if answer.lower() == 'p':
         popularity()
     elif answer.lower() == 'r':
+        random_name_generator()
+    elif answer.lower() == 'm':
         name_meaning() 
     elif answer.lower() == 's':
         fav_names_file()
     else:
-        print("Invalid choice.\nChoose r for a random name, p for a name's popularity, or s to save or print favorite names.")
+        print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save or print favorite names.")
     
 if __name__ == '__main__':
     main()
