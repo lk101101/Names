@@ -31,9 +31,9 @@ Input: s\
 Output: Smith
 
 ## Choice m: output name meanings
-"Enter a name and gender to return its origin and meaning: "\
+"Enter a name and gender to return its origin and meaning: "
 
-Input: emma f
+Input: emma f\
 Output: The name Emma is a girl's name of German origin meaning "universal"...
 
 Note: sometimes requires two tries to receive information for a name
