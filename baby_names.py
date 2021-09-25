@@ -5,7 +5,7 @@ import codecs
 import random
 import matplotlib.pyplot as plt
 import argparse
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
@@ -234,44 +234,6 @@ def random_specific_gender(gender, surname):
 
         else:
             found = False
-
-
-# * Gets meaning and origin of a name using information from BabyNames.com
-def name_meaning():
-    name = input("Enter a name to return its origin and meaning: ")
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
-    r = requests.get("https://babynames.com/name/" + name, headers=headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
-        
-    print("\n")
-    print("** Info about the Name {} from BabyNames.com **".format(name.capitalize()))
-        
-    get_origin = soup.find_all('div', {"class":"name-meaning"})
-       
-    if not get_origin:
-        print("There is no information about {} on BabyNames.com.".format(name.capitalize()))
-    else:
-        # prints origin + meaning of name
-        origin = get_origin[1].text
-        print(origin.strip() + '\n')
-            
-        # gets detailed description of name from webpage
-            
-        # replace line breaks (/br) from text
-        line_breaks = soup.find_all('br')        
-        for x in line_breaks:
-            x.replaceWith('')
-
-        meaning_class = soup.find('div', {"class": "stats"})
-        full_meaning = meaning_class.get_text().split(". ")
-
-        # note: difficult to remove all random newlines because each name page is formatted differently
-        for meaning in full_meaning:
-            meaning = meaning.strip('\n')
-            if meaning:
-                sentence = meaning.strip('\n')
-                sentence = sentence.strip()               
-                print(sentence)
       
 
 # * Saves favorite names in csv file or prints list of favorite names
@@ -306,17 +268,15 @@ def fav_names_file():
 
 
 def main():
-    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, m to return details about a name, or s to save a favorite name: ")
+    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, or s to save a favorite name: ")
     if answer.lower() == 'p':
         popularity()
     elif answer.lower() == 'r':
-        random_name_generator()
-    elif answer.lower() == 'm':
         name_meaning() 
     elif answer.lower() == 's':
         fav_names_file()
     else:
-        print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save or print favorite names.")
+        print("Invalid choice.\nChoose r for a random name, p for a name's popularity, or s to save or print favorite names.")
     
 if __name__ == '__main__':
     main()
