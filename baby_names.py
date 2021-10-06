@@ -44,11 +44,11 @@ def popularity():
             full_gender = "boys"
         else:
             exit()
-    
+
         # create instances of NameReader class
         current_name = NameReader(current_file, name, gender)
         past_name = NameReader(past_file, name, gender)
-    
+
         # get ranks from current and specified year
         cur_rank = current_name.ranking_of_name()
         past_rank = past_name.ranking_of_name()
@@ -56,7 +56,7 @@ def popularity():
         print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
         # ** visualization code **
-    
+
         years = []
         ranks = []
         # gather the ranks for each year between the specified and current year
@@ -73,10 +73,10 @@ def popularity():
                 ranks.append(int(new_rank))
 
         viz(years, ranks, name, year)
-    
+
     except:
         print("\nERROR: Too few inputs or invalid inputs.\nFormat your query as |name gender year|.\nGender must be either m or f. Year must be between 1880 and 2020.\n")
-    
+
 
 # * Creates line graph to display change in ranking of name over time
 def viz(year_list, rank_list, name, year):
@@ -85,10 +85,10 @@ def viz(year_list, rank_list, name, year):
     plt.ylabel('Popularity')
     plt.xlabel('Years')
     plt.title('Popularity of Name {} from {} to 2020'.format(name.capitalize(), year))
-    
+
     # add ranking labels to points on graph
     for x, y in zip(year_list, rank_list):
-        plt.annotate(y, (x,y))   
+        plt.annotate(y, (x,y))
     plt.grid(True)
     plt.show()
 
@@ -116,15 +116,15 @@ def random_name_generator():
     else:
         rand_input = rand_input.split(' ')
         length = len(rand_input)
-        
-        # ** all 3 inputs provided - gender, number and surname 
+
+        # ** all 3 inputs provided - gender, number and surname
         if length == 3 and rand_input[2] == 's':
             gender = rand_input[0]
             number = int(rand_input[1])
             surname = True
             for num in range(0, number):
                 random_specific_gender(gender, surname)
-        
+
         # ** 2 inputs provided
         # determine if number + surname, gender + surname, or gender + number
         elif length == 2:
@@ -149,14 +149,14 @@ def random_name_generator():
                 # gender and surname
                 elif (second == 's'):
                     surname = True
-                    random_specific_gender(gender, surname)   
+                    random_specific_gender(gender, surname)
                 # ERROR: gender is specified, but invalid second input
                 else:
                     print("\nERROR: You specified gender (m/f) but your second input is invalid.\nInput a digit x (>1) to generate x number of names or s to generate a random surname.\n")
             # ERROR
             else:
-                print("\nERROR: You provided at least one invalid input.\nRemember to specify a gender (m/f), use digits to print a certain number of names, or use the letter s to generate a random surname.\n")        
-       
+                print("\nERROR: You provided at least one invalid input.\nRemember to specify a gender (m/f), use digits to print a certain number of names, or use the letter s to generate a random surname.\n")
+
         # ** one input
         elif length == 1:
             first = rand_input[0]
@@ -186,7 +186,7 @@ def random_surname():
         surnames = list(reader)
         random_line = random.choice(surnames)
         sur = random_line[0].lower()
-        return sur.capitalize()   
+        return sur.capitalize()
 
 
 # * Gets a random name (+ surname if specified), NO specified gender
@@ -202,7 +202,7 @@ def random_gen(surname):
 
     # note: print line[2] for number of babies named this name
     print(year + ": " + line[1] + " " + line[0] + " ")
-    
+
     if (surname):
         sur = random_surname()
         print(sur)
@@ -226,7 +226,7 @@ def random_specific_gender(gender, surname):
             found = True
             # note: print line[2] for number of babies named this name
             result = year + ": " + line[1] + " " + line[0]
-            
+
             if (surname):
                 sur = random_surname()
                 result += " " + sur
@@ -247,23 +247,23 @@ def name_meaning():
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
     r = requests.get("https://nameberry.com/babyname/" + name + "/" + gender, headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
-        
+
     print("** {} **".format(name.capitalize()))
-        
+
     meaning = soup.find_all('div', {"class":"t-copy"})
 
     if not meaning:
-       print("There is no information about {} on BabyNames.com.".format(name.capitalize()))
-        
+       print("There is no information about {} on NameBerry.com.".format(name.capitalize()))
+
     else:
         for sentence in meaning:
             print(sentence.text)
-       
+
 
 # * Saves favorite names in csv file or prints list of favorite names
 def fav_names_file():
     file = "Fav_Names.csv"
-    i = input("Enter a name in format 'name gender'py to save it or enter 'print' to return your favorite names so far: ")
+    i = input("Enter a name in format 'name gender' to save it or enter 'print' to return your favorite names so far: ")
     if i.lower() == 'print':
         # check if csv file is empty
         if os.stat(file).st_size == 0:
@@ -283,10 +283,10 @@ def fav_names_file():
         name = i[0].capitalize().strip()
         gender = i[1].lower().strip()
 
-        with open(file, "a", newline='') as f:
+        with open(file, "a", newline="\n") as f:
             writer = csv.writer(f)
-            writer.writerow([name, gender])
-            
+            writer.writerow([name, gender, "\n"])
+
         print("Saved!")
 
 
@@ -298,11 +298,11 @@ def main():
     elif answer.lower() == 'r':
         random_name_generator()
     elif answer.lower() == 'm':
-        name_meaning() 
+        name_meaning()
     elif answer.lower() == 's':
         fav_names_file()
     else:
         print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save or print favorite names.")
-    
+
 if __name__ == '__main__':
     main()
