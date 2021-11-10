@@ -61,3 +61,4 @@ In your Terminal, navigate to your preferred directory. Next, type or copy and p
 ## TO DO
 * implement better command line argument handling
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
+* provide option for user to provide beginning + end year for popularity visualization
