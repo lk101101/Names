@@ -7,27 +7,23 @@ import matplotlib.pyplot as plt
 import argparse
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
 
+# read + return raw data from files
+def data_func(filename):
+    base_path = os.path.abspath(os.path.dirname(__file__))
+    full_path = os.path.join(base_path, filename)
+    file_obj = open(full_path, 'r')
+    raw_data = file_obj.readlines()
+    file_obj.close()
+    return raw_data
 
-class NameReader():
-    def __init__(self, filename, name, gender):
-        self.base_path = os.path.abspath(os.path.dirname(__file__))
-        self.full_path = os.path.join(self.base_path, filename)
-        self.file_obj = open(self.full_path, 'r')
-        self.raw_data = self.file_obj.readlines()
-        self.file_obj.close()
-
-        self.name = name
-        self.gender = gender
-
-    # if specified name matches a name from the list, return its ranking
-    def ranking_of_name(self):
-        for i in self.raw_data:
-            separated = i.split(',')
-            if separated[1].lower() == self.gender.lower() and separated[0] == self.name:
-                return separated[2].strip('\n')
-        return 0
+# if specified name matches a name from the list, return its ranking
+def ranking_of_name(name, gender, raw_data):
+    for i in raw_data:
+        separated = i.split(',')
+        if separated[1].lower() == gender.lower() and separated[0] == name:
+            return separated[2].strip('\n')
+    return 0
 
 # * Parses command line inputs, returns data for inputted name, and creates a visualization
 def popularity():
@@ -44,14 +40,14 @@ def popularity():
             full_gender = "boys"
         else:
             exit()
-
-        # create instances of NameReader class
-        current_name = NameReader(current_file, name, gender)
-        past_name = NameReader(past_file, name, gender)
-
+        
+        cur_raw_data = data_func(current_file)
+        past_raw_data = data_func(past_file)
+                
         # get ranks from current and specified year
-        cur_rank = current_name.ranking_of_name()
-        past_rank = past_name.ranking_of_name()
+        cur_rank = ranking_of_name(name, gender, cur_raw_data)
+        past_rank = ranking_of_name(name, gender, past_raw_data)
+        
 
         print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
@@ -63,8 +59,8 @@ def popularity():
         for i in range(int(year), 2021):
             years.append(str(i))
             new_file = 'yob%s.txt' % str(i)
-            new_name = NameReader(new_file, name, gender)
-            new_rank = new_name.ranking_of_name()
+            new_raw_data = data_func(new_file)
+            new_rank = ranking_of_name(name, gender, new_raw_data)
 
         # if name isn't in file, use 0 as rank
             if (new_rank == None):
@@ -103,16 +99,21 @@ m / f   -> a random name of specified gender
 2       -> 2 random first names of any gender
 f s     -> a random first and last name
 2 s     -> 2 random last names
-f 2     -> 2 random first names of specified gender (in this case, female)
+f 2     -> 2 random first names of specified gender (female)
 f 2 s   -> 2 random first names of specified gender (female) and two random last names
 """
 # Parses command line inputs for random name generator and calls specific functions
 def random_name_generator():
     rand_input = input("Specify a gender (m/f) and/or number of names to generate (>1) and/or whether to include a random surname (s). Leave blank for a single random name: ")
     surname = False
+    first_name = False
+    specified_gender = False
+    gender = 'x'
+    
     # ** nothing specified
     if not rand_input:
-        random_gen(surname)
+        first_name = True
+        random_name(first_name, specified_gender, gender, surname)
     else:
         rand_input = rand_input.split(' ')
         length = len(rand_input)
@@ -122,8 +123,10 @@ def random_name_generator():
             gender = rand_input[0]
             number = int(rand_input[1])
             surname = True
+            specified_gender = True
+            first_name = True
             for num in range(0, number):
-                random_specific_gender(gender, surname)
+                random_name(first_name, specified_gender, gender, surname)
 
         # ** 2 inputs provided
         # determine if number + surname, gender + surname, or gender + number
@@ -134,6 +137,7 @@ def random_name_generator():
             # number and surname
             if (first.isnumeric() and second == 's'):
                 number = int(first)
+                surname = True
                 for num in range(0, number):
                     sur = random_surname()
                     print(sur)
@@ -141,15 +145,19 @@ def random_name_generator():
             # gender specified
             elif (first == 'f' or first == 'm'):
                 gender = first
+                first_name = True
+                specified_gender = True
                 # gender and number
                 if (second.isnumeric()):
                     number = int(second)
                     for num in range(0, number):
-                        random_specific_gender(gender, surname)
+                        # random_specific_gender(gender, surname)
+                        random_name(first_name, specified_gender, gender, surname)
                 # gender and surname
                 elif (second == 's'):
                     surname = True
-                    random_specific_gender(gender, surname)
+                    specified_gender = True
+                    random_name(first_name, specified_gender, gender, surname)
                 # ERROR: gender is specified, but invalid second input
                 else:
                     print("\nERROR: You specified gender (m/f) but your second input is invalid.\nInput a digit x (>1) to generate x number of names or s to generate a random surname.\n")
@@ -162,14 +170,18 @@ def random_name_generator():
             first = rand_input[0]
             # gender
             if (first == 'f' or first == 'm'):
-                random_specific_gender(first, surname)
+                first_name = True
+                specified_gender = True
+                random_name(first_name, specified_gender, first, surname)
             # number
             elif first.isnumeric():
+                first_name = True
                 number = int(first)
                 for num in range(0, number):
-                    random_gen(surname)
+                    random_name(first_name, specified_gender, gender, surname)
             # surname
             elif (first == 's'):
+                surname = True
                 sur = random_surname()
                 print(sur)
             # ERROR
@@ -189,51 +201,51 @@ def random_surname():
         return sur.capitalize()
 
 
-# * Gets a random name (+ surname if specified), NO specified gender
-def random_gen(surname):
-    # get random year + file
-    year = random.randrange(1880, 2020)
-    year = str(year)
-    file_name = 'yob%s.txt' % year
-
-    # get random line and split into separate words
-    line = random.choice(open(file_name).readlines())
-    line = line.split(',')
-
-    # note: print line[2] for number of babies named this name
-    print(year + ": " + line[1] + " " + line[0] + " ")
-
-    if (surname):
-        sur = random_surname()
-        print(sur)
-
-
 # * Gets random name (+ surname if specified), specified gender
-def random_specific_gender(gender, surname):
+def random_name(first_name, specified_gender, gender, surname):
     # get random year + file
     year = random.randrange(1880, 2020)
     year = str(year)
     file_name = 'yob%s.txt' % year
 
     found = False
+    
+    # make array of 10 random names and iterate until name that matches gender (if specified) is found
+    first_name_list = random.choices(open(file_name).readlines(), k = 10)
+    
+    i = 0;
 
-    # loop until random name matches specified gender
-    while not found:
-        # get random line and split into separate words
-        line = random.choice(open(file_name).readlines())
-        line = line.split(',')
-        if line[1].lower() == gender.lower():
-            found = True
-            # note: print line[2] for number of babies named this name
-            result = year + ": " + line[1] + " " + line[0]
+    # return first name
+    if (first_name):
+        while not found:
+            # split line into separate words
+            line = first_name_list[i].split(',');
+            
+            if (specified_gender):
+                if line[1].lower() == gender.lower():
+                    found = True
+                    # note: print line[2] for number of babies named this name
+                    result = year + ": " + line[1] + " " + line[0]
 
-            if (surname):
-                sur = random_surname()
-                result += " " + sur
-            print(result)
-
-        else:
-            found = False
+                    if (surname):
+                        sur = random_surname()
+                        result += " " + sur
+                    print(result)
+                # if gender doesn't match, iterate to next name in array
+                else:
+                    found = False
+                    i += 1
+            
+            # no gender provided
+            else:
+                found = True
+                result = year + ": " + line[1] + " " + line[0]
+                
+                if (surname):
+                    sur = random_surname()
+                    result += " " + sur
+                print(result)
+                
 
 
 # * Gets meaning and origin of a name using information from NameBerry.com
