@@ -11,7 +11,7 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 6. save favorite names to CSV file and print all names from file (choice 's')
 
 Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
-For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html
+For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html . I have included the CSV files for the years 2000 and 2020 in 'names_files' folder. 
 
 For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ surnames.
 
@@ -59,6 +59,5 @@ Note: This feature uses the CSV file 'Fav_Names.csv'
 In your Terminal, navigate to your preferred directory. Next, type or copy and paste ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory. Navigate to the new folder, named Names. Enter ' python baby_names.py ' to run the code. 
 
 ## TO DO
-* implement better command line argument handling
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
 * provide option for user to provide beginning + end year for popularity visualization
