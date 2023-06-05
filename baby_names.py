@@ -30,17 +30,17 @@ def popularity():
     try:
         name,gender,year = input("Find out how many babies are named a certain name in a specific year. Format as 'name gender (m/f) year (>1880)': ").split()
         name = name.capitalize()
-
-        current_file = 'yob2020.txt'
-        past_file = 'yob%s.txt' % year
-
+        
+        current_file = 'names_files/yob2020.txt'
+        past_file = 'names_files/yob%s.txt' % year
+    
         if gender.lower() == 'f':
             full_gender = "girls"
         elif gender.lower() == 'm':
             full_gender = "boys"
         else:
             exit()
-        
+                    
         cur_raw_data = data_func(current_file)
         past_raw_data = data_func(past_file)
                 
@@ -48,17 +48,15 @@ def popularity():
         cur_rank = ranking_of_name(name, gender, cur_raw_data)
         past_rank = ranking_of_name(name, gender, past_raw_data)
         
-
         print("The {} name {} was used {} times in 2020 and {} times in {}".format(full_gender, name, cur_rank, past_rank, year))
 
         # ** visualization code **
-
         years = []
         ranks = []
         # gather the ranks for each year between the specified and current year
         for i in range(int(year), 2021):
             years.append(str(i))
-            new_file = 'yob%s.txt' % str(i)
+            new_file = 'names_files/yob%s.txt' % str(i)
             new_raw_data = data_func(new_file)
             new_rank = ranking_of_name(name, gender, new_raw_data)
 
@@ -200,13 +198,12 @@ def random_surname():
         sur = random_line[0].lower()
         return sur.capitalize()
 
-
 # * Gets random name (+ surname if specified), specified gender
 def random_name(first_name, specified_gender, gender, surname):
     # get random year + file
     year = random.randrange(1880, 2020)
     year = str(year)
-    file_name = 'yob%s.txt' % year
+    file_name = 'names_files/yob%s.txt' % year
 
     found = False
     
