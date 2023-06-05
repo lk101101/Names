@@ -88,8 +88,6 @@ def viz(year_list, rank_list, name, year):
 
 
 # ** Option r: random name generator **
-# TO DO: implement better command line handling
-
 """
 Examples of valid inputs:
 (blank) -> a random first name of any gender
