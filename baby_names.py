@@ -176,19 +176,15 @@ def random_name(first_name, specified_gender, gender, surname):
     year = random.randrange(1880, 2020)
     year = str(year)
     file_name = 'names_files/yob%s.txt' % year
-
+    
     found = False
     
-    # make array of 10 random names and iterate until name that matches gender (if specified) is found
-    first_name_list = random.choices(open(file_name).readlines(), k = 10)
+    first_name_list = random.choice(open(file_name).readlines())
     
-    i = 0;
-
-    # return first name
     if (first_name):
         while not found:
             # split line into separate words
-            line = first_name_list[i].split(',');
+            line = first_name_list.split(',')
             
             if (specified_gender):
                 if line[1].lower() == gender.lower():
@@ -200,10 +196,9 @@ def random_name(first_name, specified_gender, gender, surname):
                         sur = random_surname()
                         result += " " + sur
                     print(result)
-                # if gender doesn't match, iterate to next name in array
+                # if gender doesn't match, generate new random name
                 else:
-                    found = False
-                    i += 1
+                    first_name_list = random.choice(open(file_name).readlines())
             
             # no gender provided
             else:
@@ -215,7 +210,6 @@ def random_name(first_name, specified_gender, gender, surname):
                     result += " " + sur
                 print(result)
                 
-
 
 # * Gets meaning and origin of a name using information from NameBerry.com
 def name_meaning():
