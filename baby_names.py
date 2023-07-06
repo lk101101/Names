@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import argparse
 import requests
 from bs4 import BeautifulSoup
+import pycountry
 
 # read + return raw data from files
 def data_func(filename):
@@ -209,16 +210,9 @@ def random_name(first_name, specified_gender, gender, surname):
                     sur = random_surname()
                     result += " " + sur
                 print(result)
-                
 
-# * Gets meaning and origin of a name using information from NameBerry.com
-def name_meaning():
-    name, gender = input("Enter a name and gender to return its origin and meaning: ").split()
-    if (gender.lower() == 'm'):
-        gender = "boy"
-    else:
-        gender = "girl"
-
+# * Scrapes Name Berry for name's origin and meaning
+def get_name_meaning(name, gender):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
     r = requests.get("https://nameberry.com/babyname/" + name + "/" + gender, headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
@@ -234,6 +228,59 @@ def name_meaning():
         for sentence in meaning:
             print(sentence.text)
 
+# Calls nationalize.io API to return predicted nationality of a name
+def nationalize(name):
+    response = requests.get(f"https://api.nationalize.io?name={name}")
+    if response.status_code == 200:
+        print('\n** Predicted nationality **')
+        data = response.json()
+        for country in data['country']:
+            countryID = country['country_id']
+            try:
+                full_country_name = pycountry.countries.get(alpha_2=countryID)
+                countryID = full_country_name.name
+            except:
+                print('Error: Invalid country code')
+            print('Country: {} | Probability: {}%'.format(countryID, round(country['probability'] * 100)))
+    else:
+        print("\nError: Failed to retrieve data from the Nationalize API")
+
+# Calls genderize.io API to return predicted gender of a name
+def genderize(name):
+    response = requests.get(f"https://api.genderize.io?name={name}")
+    if response.status_code == 200:
+        print('\n** Predicted gender **')
+        data = response.json()
+        print('Gender: {} | Probability: {}%'.format(data['gender'], round(data['probability'] * 100)))
+    else:
+        print("\nError: Failed to retrieve data from the Genderize API")
+
+# Calls agify.io API to return predicted age of a name
+def agify(name):
+    response = requests.get(f"https://api.agify.io?name={name}")
+    if response.status_code == 200:
+        print('\n** Predicted age **')
+        data = response.json()
+        print("Age: {}".format(data['age']))
+        print('\n')
+    else:
+        print("\nError: Failed to retrieve data from the Agify API")
+
+# * Outputs a name's meaning and predicted gender, age, and nationality
+def name_information():
+    try:
+        name, gender = input("Enter a name and gender (f or m) to return its origin, meaning, and predicted gender, age, and nationality: ").split()
+        if (gender.lower() == 'm'):
+            gender = "boy"
+        else:
+            gender = "girl"
+
+        get_name_meaning(name, gender)
+        nationalize(name)
+        genderize(name)
+        agify(name)
+    except:
+        print("Error: Remember to input both a name and a gender.")
 
 # * Saves favorite names in csv file or prints list of favorite names
 def fav_names_file():
@@ -268,16 +315,11 @@ def fav_names_file():
 options = {
     'p': popularity,
     'r': random_name_generator,
-    'm': name_meaning,
+    'm': name_information,
     's': fav_names_file
 }
 
 def main():
-    answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, m to return details about a name, or s to save a favorite name: ")
-    if answer in options:
-        options[answer]()
-    else:
-        print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save your favorite names.")
     done = False;
     while (not done):
         answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, m to return details about a name, s to save a favorite name, or f to exit: ")
