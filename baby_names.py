@@ -278,6 +278,15 @@ def main():
         options[answer]()
     else:
         print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save your favorite names.")
+    done = False;
+    while (not done):
+        answer = input("Select an option: r to return a random name, p to return the popularity ranking of a name, m to return details about a name, s to save a favorite name, or f to exit: ")
+        if answer in options:
+            options[answer]()
+        elif answer == 'f':
+            done = True
+        else:
+            print("Invalid choice.\nChoose r for a random name, p for a name's popularity, m for a name's meaning, or s to save your favorite names.")
 
 if __name__ == '__main__':
     main()
