@@ -35,17 +35,17 @@ Output: Smith
 
 Input: emma f\
 Output:\
-The name Emma is a girl's name of German origin meaning "universal"... (full description scraped from NameBerry.com)\
+The name Emma is a girl's name of German origin meaning "universal"... (full description scraped from NameBerry.com)
 
-Predicted nationality\
+Predicted nationality:\
 Country: United Kingdom | Probability: 10%\
 Country: Sweden | Probability: 10%\
-...\
+...
 
-Predicted gender\
-Gender: female | Probability: 99%\
+Predicted gender:\
+Gender: female | Probability: 99%
 
-Predicted age\
+Predicted age:\
 Age: 40
 
 ## Choice p: return the popularity ranking of a name
@@ -66,7 +66,7 @@ Output: Emma, f
 Note: This feature uses the CSV file 'Fav_Names.csv'
 
 # How to Download and Run Code
-In your Terminal, navigate to your preferred directory. Next, type or copy and paste ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory. Navigate to the new folder, named Names. Enter ' python baby_names.py ' to run the code. 
+In your Terminal, navigate to your preferred directory. Next, type or copy and paste ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory. Navigate to the new folder called Names. Create a Python environment and run 'pip install -r requirements.txt' to download the required packages. Enter ' python baby_names.py ' to run the code. 
 
 ## TO DO
 * allow for more search criteria such as name length, initial, certain level of popularity, etc.
