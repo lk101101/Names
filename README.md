@@ -7,10 +7,10 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 2. print number of babies named with specified name in specified year and current year (choice 'p')
 3. display a line graph visualizing the change in popularity from specified year to current year (choice 'p')
 4. return a random first and/or last name from a random year (choice 'r') with options to specify gender (m/f) and number of names to generate
-5. output information about the origin and meaning of name scraped from NameBerry.com (choice 'm')
+5. output information about a name's origin and meaning scraped from NameBerry.com as well as its predicted nationality, age, and gender gathered from the Nationalize.io, Genderize.io, and Agify.io APIs (choice 'm')
 6. save favorite names to CSV file and print all names from file (choice 's')
 
-Currently, the only options for gender are male (m) and female (f) so retrieving data for gender neutral names would require two searches.
+Currently, the only options for gender are male (m) and female (f). 
 For all of the annual datasets (ranging all the way to 1880), download 'National data' on the SSA site:  https://www.ssa.gov/oact/babynames/limits.html . I have included the CSV files for the years 2000 and 2020 in 'names_files' folder. 
 
 For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ surnames.
@@ -34,9 +34,19 @@ Output: Smith
 "Enter a name and gender to return its origin and meaning: "
 
 Input: emma f\
-Output: The name Emma is a girl's name of German origin meaning "universal"... (full description scraped from NameBerry.com)
+Output:\
+The name Emma is a girl's name of German origin meaning "universal"... (full description scraped from NameBerry.com)\
 
-Note: sometimes requires two tries to receive information for a name
+Predicted nationality\
+Country: United Kingdom | Probability: 10%\
+Country: Sweden | Probability: 10%\
+...\
+
+Predicted gender\
+Gender: female | Probability: 99%\
+
+Predicted age\
+Age: 40
 
 ## Choice p: return the popularity ranking of a name
 "Enter as name gender (m/f) year"\
