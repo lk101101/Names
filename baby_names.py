@@ -1,6 +1,5 @@
 import os
-import csv
-from csv import reader
+from csv import reader, writer
 import codecs
 import random
 import matplotlib.pyplot as plt
@@ -162,11 +161,11 @@ def handle_three_inputs(input1, input2, input3):
 # * Gets a random surname from the surname CSV file
 def random_surname():
     with open("2010CensusSurnames.csv") as f:
-        reader = csv.reader(f)
+        csv_reader = reader(f)
         # skip first two rows in file
-        next(reader)
-        next(reader)
-        surnames = list(reader)
+        next(csv_reader)
+        next(csv_reader)
+        surnames = list(csv_reader)
         random_line = random.choice(surnames)
         sur = random_line[0].lower()
         return sur.capitalize()
@@ -295,7 +294,9 @@ def fav_names_file():
             with open(file, "r", encoding='utf-8-sig') as f:
                 csv_reader = reader(f)
                 for row in csv_reader:
-                    print(row[0] + ", " + row[1])
+                    # avoid printing empty rows
+                    if row:
+                        print(row[0] + ", " + row[1])
 
     else:
         i = i.split()
@@ -304,10 +305,15 @@ def fav_names_file():
              exit()
         name = i[0].capitalize().strip()
         gender = i[1].lower().strip()
+        
+        print(name + " " + gender)
 
-        with open(file, "a", newline="\n") as f:
-            writer = csv.writer(f)
-            writer.writerow([name, gender, "\n"])
+        with open(file, "a") as f:
+            # if not at beginning of a line -> avoid overwriting existing rows
+            if f.tell() > 0:
+                f.write("\n")
+            csv_writer = writer(f)
+            csv_writer.writerow([name, gender])
 
         print("Saved!")
 
