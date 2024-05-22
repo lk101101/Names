@@ -1,0 +1,30 @@
+<!-- templates/name_info.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Information for a Name!</title>
+</head>
+<body>
+    <h2>Get Information for a Name</h2>
+    <form action="/name_information" method="post">
+        <input type="text" name="name" placeholder="Name" required>
+        <select name="gender" required>
+            <option value="">Please select</option>
+            <option value="boy">Boy</option>
+            <option value="girl">Girl</option>
+        </select>
+        <input type="submit" value="Get Information">
+    </form>
+
+    <!-- Check if texts have been passed to the template -->
+	{% if texts %}
+	<h2>Name Information</h2>
+	<ul>
+		{% for text in texts %}
+		<li>{{ text }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</body>
+</html>
