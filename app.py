@@ -10,19 +10,23 @@ def home():
     """
     return render_template('index.html')
 
-# TODO - Route for popularity function
 
-# @app.route('/popularity', methods=['GET', 'POST'])
-# def get_popularity():
-#     # Assume that you have a `popularity` function in your 'names' module. It should take name, gender, year, and return a plot URL.
-#     if request.method == 'POST':
-#         name = request.form['name']
-#         gender = request.form['gender']
-#         year = request.form['year']
-#         # Implement the 'popularity' function in your 'names' module.
-#         plot_url = names.popularity(name, gender, year)
-#         return render_template('popularity.html', plot_url=plot_url)
-#     return render_template('popularity_form.html')
+@app.route('/vizs', methods=['GET', 'POST'])
+def get_visualizations():
+    """
+    Route to generate visualizations. 
+
+    Output: 
+    - Rendered 'generate_form.html' template with a list of generated names when POST method is used.
+    - Rendered 'generate_form.html' template with form when GET method is used.
+    """
+    if request.method == 'POST':
+        name = request.form['name']
+        gender = request.form['gender']
+        year = request.form['year']
+        # plot_url = names.popularity(name, gender, year)
+        return render_template('visualizations.html', plot_url=plot_url)
+    return render_template('visualizations_form.html')
 
 
 @app.route('/random_name', methods=['GET', 'POST'])
