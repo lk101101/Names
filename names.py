@@ -55,7 +55,6 @@ def popularity(name, gender, year):
     """
     Parses user input, returns data for the inputted name, 
     and creates a visualization of the name's popularity.
-    The user is prompted to enter a name, gender, and a year in the following format: 'name gender year'.
     """
     current_file = 'names_files/yob2020.txt'
     past_file = f'names_files/yob{year}.txt'
@@ -124,7 +123,7 @@ def random_surname():
     Output:
         string (surname)
     """
-    with open("2010CensusSurnames.csv", encoding='utf-8-sig') as f:
+    with open("names_files/2010CensusSurnames.csv", encoding='utf-8-sig') as f:
         csv_reader = reader(f)
         # skip first two rows in file
         # TODO: can use itertools to skip rows
