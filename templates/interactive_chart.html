@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Interactive Altair Chart</title>
+	<!-- Load Vega, Vega-Lite, and Vega-Embed -->
+	<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+	<form action="/interactive_chart" method="post">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" placeholder="Enter Name" required>
+	
+		<label for="gender">Gender:</label>
+		<select id="gender" name="gender" required>
+			<option value="">Please select</option>
+			<option value="m">Boy</option>
+			<option value="f">Girl</option>
+		</select>
+	
+		<label for="start_year">Start Year:</label>
+		<input type="number" id="start_year" name="start_year" min="1880" max="2022" placeholder="1880" required>
+	
+		<label for="end_year">End Year:</label>
+		<input type="number" id="end_year" name="end_year" min="1880" max="2022" placeholder="2022" required>
+	
+		<input type="submit" value="Generate Chart">
+	</form>
+
+	<!-- Container for the visualization -->
+	<div id="vis1"></div>
+	<div id="vis2"></div>
+
+
+	<script type="text/javascript">
+		// Embed the Altair Visualization
+		var chart_spec = {{ chart_json | safe }};
+		vegaEmbed('#vis1', chart_spec);
+
+		// 2nd viz
+		var chart_spec2 = {{ chart_json2 | safe }};
+		vegaEmbed('#vis2', chart_spec2);
+	</script>
+</body>
+{% endblock %}

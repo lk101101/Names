@@ -12,108 +12,157 @@ import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
 import pycountry
+import pandas as pd
 
 
-def return_raw_data(filename):
+# def return_raw_data(filename):
+#     """
+#     Reads and returns the raw data from the provided file.
+
+#     input:
+#         filename: string of the filename of the file containing name data.
+#     ouput:
+#         list of strings for each line from the file.
+#     """
+
+#     base_path = os.path.abspath(os.path.dirname(__file__))
+#     full_path = os.path.join(base_path, filename)
+
+#     with open(full_path, 'r', encoding='utf-8-sig') as file_obj:
+#         raw_data = file_obj.readlines()
+#     return raw_data
+
+
+# def number_of_births(name, gender, raw_data):
+#     """
+#     Finds and returns the number of babies named a given name for a specified gender within the raw data.
+
+#     input:
+#         name: string, name to check the ranking of.
+#         gender: string, 'm' for male or 'f' for female.
+#         raw_data: list of strings, raw data from the names data file.
+#     output:
+#         string - the ranking of the given name if found; otherwise, returns 0.
+#     """
+#     for i in raw_data:
+#         separated = i.split(',')
+#         if separated[1].lower() == gender.lower() and separated[0] == name:
+#             return separated[2].strip('\n')
+#     return 0
+
+
+def load_yearly_data(year, name, gender):
     """
-    Reads and returns the raw data from the provided file.
+    Loads data for a specific year, name, and gender from the baby names dataset.
 
     input:
-        filename: string of the filename of the file containing name data.
+        year: int
+        name: string
+        gender: string
+
     ouput:
-        list of strings for each line from the file.
+        the number of births associated with the given name and gender for that year; 0 if name isn't found
     """
-
-    base_path = os.path.abspath(os.path.dirname(__file__))
-    full_path = os.path.join(base_path, filename)
-
-    with open(full_path, 'r', encoding='utf-8-sig') as file_obj:
-        raw_data = file_obj.readlines()
-    return raw_data
-
-
-def number_of_births(name, gender, raw_data):
-    """
-    Finds and returns the number of babies named a given name for a specified gender within the raw data.
-
-    input:
-        name: string, name to check the ranking of.
-        gender: string, 'm' for male or 'f' for female.
-        raw_data: list of strings, raw data from the names data file.
-    output:
-        string - the ranking of the given name if found; otherwise, returns 0.
-    """
-    for i in raw_data:
-        separated = i.split(',')
-        if separated[1].lower() == gender.lower() and separated[0] == name:
-            return separated[2].strip('\n')
+    file_name = f'names_files/yob{year}.txt'
+    file_path = os.path.join(os.path.dirname(__file__), file_name)
+    try:
+        with open(file_path, 'r', encoding='utf-8-sig') as f:
+            for line in f:
+                n, g, births = line.strip().split(',')
+                if n.lower() == name.lower() and g.lower() == gender.lower():
+                    return int(births)
+    # TODO: handle better? 
+    except FileNotFoundError:
+        print(f"Data for the year {year} is not available.")
     return 0
 
 
+def popularity(name, gender, start_year, end_year):
+    """
+    Returns the number of occurrences of a given name for each year within a given range.
+
+    input: 
+        name: string
+        gender: string - 'm' for male or 'f' for female
+        start_year: int
+        end_year: int
+
+    ouput:
+        Pandas DataFrame
+    """
+    data = {'Year': [], 'Births': []}
+
+    for year in range(start_year, end_year + 1):
+        data['Year'].append(year)
+        data['Births'].append(load_yearly_data(year, name, gender))
+
+    return pd.DataFrame(data)
+
+
 # TODO: split into helper functions
-def popularity(name, gender, year):
-    """
-    Parses user input, returns data for the inputted name, 
-    and creates a visualization of the name's popularity.
-    """
-    current_file = 'names_files/yob2020.txt'
-    past_file = f'names_files/yob{year}.txt'
+# def popularity(name, gender, year):
+#     """
+#     Parses user input, returns data for the inputted name,
+#     and creates a visualization of the name's popularity.
+#     """
+#     current_file = 'names_files/yob2020.txt'
+#     past_file = f'names_files/yob{year}.txt'
 
-    if gender.lower() == 'f':
-        full_gender = "girls"
-    elif gender.lower() == 'm':
-        full_gender = "boys"
-    else:
-        # TODO: better handle this case
-        exit()
+#     if gender.lower() == 'f':
+#         full_gender = "girls"
+#     elif gender.lower() == 'm':
+#         full_gender = "boys"
+#     else:
+#         # TODO: better handle this case
+#         exit()
 
-    cur_raw_data = return_raw_data(current_file)
-    past_raw_data = return_raw_data(past_file)
+#     cur_raw_data = return_raw_data(current_file)
+#     past_raw_data = return_raw_data(past_file)
 
-    # get ranks from current and specified year
-    cur_rank = number_of_births(name, gender, cur_raw_data)
-    past_rank = number_of_births(name, gender, past_raw_data)
+#     # get ranks from current and specified year
+#     cur_rank = number_of_births(name, gender, cur_raw_data)
+#     past_rank = number_of_births(name, gender, past_raw_data)
 
-    print(
-        f"The {full_gender} name {name} was used {cur_rank} times in 2020"
-        f" and {past_rank} times in {year}")
+#     print(
+#         f"The {full_gender} name {name} was used {cur_rank} times in 2020"
+#         f" and {past_rank} times in {year}")
 
-    # ** visualization code **
-    years = []
-    ranks = []
-    # gather the ranks for each year between the specified and current year
-    # TODO - refactor to be more efficient
-    # TODO - more efficient way to read in CSV files?
-    for i in range(int(year), 2021):
-        years.append(str(i))
-        new_file = f'names_files/yob{str(i)}.txt'
-        new_raw_data = return_raw_data(new_file)
-        new_rank = number_of_births(name, gender, new_raw_data)
+#     # ** visualization code **
+#     years = []
+#     ranks = []
+#     # gather the ranks for each year between the specified and current year
+#     # TODO - refactor to be more efficient
+#     # TODO - more efficient way to read in CSV files?
+#     for i in range(int(year), 2021):
+#         years.append(str(i))
+#         new_file = f'names_files/yob{str(i)}.txt'
+#         new_raw_data = return_raw_data(new_file)
+#         new_rank = number_of_births(name, gender, new_raw_data)
 
-    # if name isn't in file, use 0 as rank
-    # TODO: handle differently?
-        if (new_rank is None):
-            ranks.append(0)
-        else:
-            ranks.append(int(new_rank))
+#     # if name isn't in file, use 0 as rank
+#     # TODO: handle differently?
+#         if (new_rank is None):
+#             ranks.append(0)
+#         else:
+#             ranks.append(int(new_rank))
 
-    viz(years, ranks, name, year)
+#     viz(years, ranks, name, year)
 
-# TODO: make visualization module
+# # TODO: make visualization module
 
 
-def viz(year_list, rank_list, name, year):
-    # *change color of line here*
-    plt.plot(year_list, rank_list, color='deepskyblue', marker='o')
-    plt.ylabel('Popularity')
-    plt.xlabel('Years')
-    plt.title(f'Popularity of Name {name.capitalize()} from {year} to 2020')
+# def viz(year_list, rank_list, name, year):
+#     # *change color of line here*
+#     plt.plot(year_list, rank_list, color='deepskyblue', marker='o')
+#     plt.ylabel('Popularity')
+#     plt.xlabel('Years')
+#     plt.title(f'Popularity of Name {name.capitalize()} from {year} to 2020')
 
-    # add ranking labels to points on graph
-    for x, y in zip(year_list, rank_list):
-        plt.annotate(y, (x, y))
-    plt.grid(True)
-    plt.show()
+#     # add ranking labels to points on graph
+#     for x, y in zip(year_list, rank_list):
+#         plt.annotate(y, (x, y))
+#     plt.grid(True)
+#     plt.show()
 
 
 def random_surname():
@@ -122,6 +171,7 @@ def random_surname():
 
     Output:
         string (surname)
+
     """
     with open("names_files/2010CensusSurnames.csv", encoding='utf-8-sig') as f:
         csv_reader = reader(f)
