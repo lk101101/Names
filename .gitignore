@@ -1,3 +1,4 @@
 env
 .vscode
 names_files
+__pycache__
