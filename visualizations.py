@@ -9,13 +9,14 @@ def simple_line_chart(df):
     TODO: add docstring
     """
     chart = alt.Chart(df).mark_line(point=True).encode(
-        x=alt.X('Year:O', axis=alt.Axis(labelAngle=0)),
-        y='Births:Q',
-        tooltip=['Year', 'Births']
+        x=alt.X('Year:Q',
+                axis=alt.Axis(format='d', title='Year')),
+        y=alt.Y('Births:Q', title='Births'),
+        tooltip=['Year:Q', 'Births:Q']
     ).properties(
         width=1000,
-        height=400,
-    ).interactive(bind_x=True, bind_y=True)
+        height=400
+    ).interactive(bind_x=True)
     return chart
 
 
@@ -46,7 +47,7 @@ def popularity_heatmap(df):
         stroke=alt.condition(
             select_checkbox, alt.value('black'), alt.value(None))
     ).properties(
-        width=400,
+        width=500,
         height=300,
         title='Heatmap of Births by Year Within Each Decade'
     )
