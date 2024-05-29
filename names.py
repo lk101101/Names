@@ -177,8 +177,8 @@ def nationalize(name):
         country_code = country.get('country_id')
         probability = country.get('probability')
         if country_code and probability is not None:
-            country_name = pycountry.countries.get(alpha_2=country_code).name if pycountry.countries.get(
-                alpha_2=country_code) else country_code
+            cur_country = pycountry.countries.get(alpha_2=country_code)
+            country_name = cur_country.name if cur_country else country_code
             prob_string = f"{
                 country_name} - probability: {round(probability * 100, 2)}%"
             country_strings.append(prob_string)
