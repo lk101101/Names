@@ -11,7 +11,7 @@ def simple_line_chart(df):
     chart = alt.Chart(df).mark_line(point=True).encode(
         x=alt.X('Year:Q',
                 axis=alt.Axis(format='d', title='Year')),
-        y=alt.Y('Births:Q', title='Births'),
+        y=alt.Y('Births:Q', title='Number of Births'),
         tooltip=['Year:Q', 'Births:Q']
     ).properties(
         width=1000,

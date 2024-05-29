@@ -66,9 +66,8 @@ def random_surname():
     """
     Selects and returns a random surname from the surnames file.
 
-    Output:
+    output:
         string (surname)
-
     """
     with open("names_files/2010CensusSurnames.csv", encoding='utf-8-sig') as f:
         csv_reader = reader(f)
@@ -89,6 +88,8 @@ def random_name(gender="", surname=False):
     input:
         gender: string ('m' or 'f'); default empty string ""
         surname: boolean; default False
+    output:
+        string: random first and/or last name
     """
     year = str(random.randrange(1880, 2020))
     file_name = f'names_files/yob{year}.txt'
@@ -106,7 +107,7 @@ def random_name(gender="", surname=False):
 
     if surname:
         sur = random_surname()  # Assuming you have a random_surname function
-        return f"{first_name} {sur}"
+        first_name += f" {sur}"
 
     return first_name
 
@@ -116,8 +117,10 @@ def get_name_meaning(name, gender):
     Scrapes NameBerry for the origin and meaning of the given name and prints the result.
 
     input:
-        name: string.
-        gender: string, 'boy' or 'girl'.
+        name: string
+        gender: string, 'boy' or 'girl'
+    output:
+        string containing scraped name meaning or error message
     """
     name = name.capitalize()
     headers = {
@@ -133,7 +136,8 @@ def get_name_meaning(name, gender):
     except requests.exceptions.Timeout:
         return "The request timed out."
     except requests.exceptions.HTTPError as e:
-        return f"HTTP Error: {e}"
+        # return f"HTTP Error: {e}"
+        return f"Error: No information found on NameBerry for {name}"
     except requests.exceptions.RequestException as e:
         return f"An error occurred while making the request: {e}"
 
@@ -150,7 +154,9 @@ def nationalize(name):
     Uses nationalize.io API to predict and print the nationality of a given name.
 
     input:
-        name: string.
+        name: string
+    output:
+        string containing predicted nationalities or error message
     """
     try:
         response = requests.get(
@@ -186,7 +192,9 @@ def genderize(name):
     Uses genderize.io API to predict and print the gender of a given name.
 
     input:
-        name: string.
+        name: string
+    output:
+        string containing predicted gender or error message
     """
 
     try:
@@ -212,7 +220,9 @@ def agify(name):
     Uses agify.io API to predict and print the age associated with a given name.
 
     input:
-        name: A string. 
+        name: string 
+    output:
+        string containing predicted age or error message
     """
     try:
         response = requests.get(
@@ -237,6 +247,9 @@ def name_information(name, gender):
     input:
         name: string
         gender: string (either 'boy' or 'girl')
+    output:
+        array containing outputs from name meaning and predicted nationalities,
+        age, and gender functions
     """
     return [
         name.capitalize(),
