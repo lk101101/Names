@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<form action="/interactive_chart" method="post">
+	<form action="/data_visualizations" method="post">
 		<label for="name">Name:</label>
 		<input type="text" id="name" name="name" placeholder="Enter Name" required>
 	
@@ -32,18 +32,21 @@
 	</form>
 
 	<!-- Container for the visualization -->
-	<div id="vis1"></div>
-	<div id="vis2"></div>
+	{% if input_data %}
+	<h2>Displaying visualizations for {{ input_data[0] }} between {{ input_data[1] }}-{{input_data[2]}}</h2>
+	{% endif %}
+	<div id="viz1"></div>
+	<div id="viz2"></div>
 
 
 	<script type="text/javascript">
 		// TODO: fix errors
 		var chart_spec = {{ chart_json | safe }};
-		vegaEmbed('#vis1', chart_spec);
+		vegaEmbed('#viz1', chart_spec);
 
 		// 2nd viz
 		var chart_spec2 = {{ chart_json2 | safe }};
-		vegaEmbed('#vis2', chart_spec2);
+		vegaEmbed('#viz2', chart_spec2);
 	</script>
 </body>
 {% endblock %}

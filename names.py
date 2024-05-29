@@ -34,7 +34,6 @@ def load_yearly_data(year, name, gender):
                 n, g, births = line.strip().split(',')
                 if n.lower() == name.lower() and g.lower() == gender.lower():
                     return int(births)
-    # TODO: handle better?
     except FileNotFoundError:
         print(f"Data for the year {year} is not available.")
     return 0
@@ -135,7 +134,7 @@ def get_name_meaning(name, gender):
         r.raise_for_status()
     except requests.exceptions.Timeout:
         return "The request timed out."
-    except requests.exceptions.HTTPError as e:
+    except requests.exceptions.HTTPError:
         # return f"HTTP Error: {e}"
         return f"Error: No information found on NameBerry for {name}"
     except requests.exceptions.RequestException as e:

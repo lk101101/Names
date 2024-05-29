@@ -14,10 +14,10 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/interactive_chart', methods=['GET', 'POST'])
-def interactive_chart():
+@app.route('/data_visualizations', methods=['GET', 'POST'])
+def data_visualizations():
     """ 
-    TODO: add docstring
+    Route to create data visualizations.
     """
 
     if request.method == 'POST':
@@ -29,15 +29,15 @@ def interactive_chart():
 
         df = names.popularity(name, gender, start_year, end_year)
 
-        chart = visualizations.simple_line_chart(df)
-        chart2 = visualizations.popularity_heatmap(df)
+        line_chart = visualizations.simple_line_chart(df)
+        heatmap = visualizations.popularity_heatmap(df)
 
-        chart_json = chart.to_json()
-        chart_json2 = chart2.to_json()
+        line_chart_json = line_chart.to_json()
+        heatmap_json = heatmap.to_json()
 
-        return render_template('interactive_chart.html', chart_json=chart_json, chart_json2=chart_json2)
+        return render_template('data_visualizations.html', input_data=[name.capitalize(), start_year, end_year], chart_json=line_chart_json, chart_json2=heatmap_json)
 
-    return render_template('interactive_chart.html', chart_json="{}")
+    return render_template('data_visualizations.html', chart_json="{}")
 
 
 @app.route('/random_name', methods=['GET', 'POST'])

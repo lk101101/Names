@@ -1,12 +1,18 @@
 """
-Visualize baby name data using Altair.
+Create interactive data visualizations using name data. 
 """
 import altair as alt
 
 
 def simple_line_chart(df):
     """ 
-    TODO: add docstring
+    Create a line chart from a Pandas DataFrame that visualizes the frequency of a name over time. 
+
+    input: 
+        Pandas DataFrame containing years and associated number of births
+        for a user-specified name
+    output:
+        simple line chart displaying the number of births over the range of years
     """
     chart = alt.Chart(df).mark_line(point=True).encode(
         x=alt.X('Year:Q',
@@ -22,7 +28,14 @@ def simple_line_chart(df):
 
 def popularity_heatmap(df):
     """ 
-    TODO: add docstring
+    Create a heatmap from a Pandas DataFrame that visualizes the frequency of a name over time. 
+
+    input: 
+        Pandas DataFrame containing years and associated number of births
+        for a user-specified name
+    output:
+        heatmap displaying the number of births over the range of years
+        binned by decade
     """
     df['Decade'] = (df['Year'] // 10) * 10
     df['YearWithinDecade'] = df['Year'] % 10
@@ -65,5 +78,5 @@ def popularity_heatmap(df):
         select_checkbox
     )
 
-    chart2 = heatmap + text
-    return chart2
+    heatmap += text
+    return heatmap
