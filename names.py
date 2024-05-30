@@ -179,11 +179,12 @@ def nationalize(name):
         if country_code and probability is not None:
             cur_country = pycountry.countries.get(alpha_2=country_code)
             country_name = cur_country.name if cur_country else country_code
-            prob_string = f"{
-                country_name} - probability: {round(probability * 100, 2)}%"
+            prob_string = f"{country_name}" + \
+                " - probability: " + f"{round(probability * 100, 2)}%"
             country_strings.append(prob_string)
+    final_nationalities = "\n".join(country_strings)
 
-    return 'Predicted nationality:'.join(country_strings)
+    return 'Predicted nationalities:\n' + final_nationalities
 
 
 def genderize(name):
@@ -253,7 +254,7 @@ def name_information(name, gender):
     return [
         name.capitalize(),
         get_name_meaning(name, gender),
-        *nationalize(name).split('\n'),
+        *nationalize(name).split("\n"),
         genderize(name),
         agify(name)
     ]
