@@ -37,6 +37,7 @@ def data_visualizations():
 
         return render_template('data_visualizations.html', input_data=[name.capitalize(), start_year, end_year], chart_json=line_chart_json, chart_json2=heatmap_json)
 
+    # TODO: fix?
     return render_template('data_visualizations.html', chart_json="{}")
 
 
@@ -74,9 +75,12 @@ def name_information():
 
         # TODO: fix formatting
         cur_text = names.name_information(name, gender)
+        world_map = visualizations.create_nationalize_map(name)
 
-        return render_template('name_info.html', texts=cur_text)
-    return render_template('name_info.html')
+        world_map_json = world_map.to_json()
+
+        return render_template('name_info.html', texts=cur_text, world_map=world_map_json)
+    return render_template('name_info.html', world_map="{}")
 
 
 if __name__ == "__main__":
