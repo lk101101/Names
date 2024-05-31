@@ -2,7 +2,7 @@
 This module works with baby name data from the US Census, baby name websites, and APIs.
 Allows users to discover the popularity of a selected name,
 generate random names (both first and last names), and
-retrieve information about name meanings and predicted gender, age, and nationality. 
+retrieve information about name meanings and predicted gender, age, and nationality.
 """
 import os
 from csv import reader
@@ -43,7 +43,7 @@ def popularity(name, gender, start_year, end_year):
     """
     Returns the number of occurrences of a given name for each year within a given range.
 
-    input: 
+    input:
         name: string
         gender: string - 'm' for male or 'f' for female
         start_year: int
@@ -71,7 +71,6 @@ def random_surname():
     with open("names_files/2010CensusSurnames.csv", encoding='utf-8-sig') as f:
         csv_reader = reader(f)
         # skip first two rows in file
-        # TODO: can use itertools to skip rows
         next(csv_reader)
         next(csv_reader)
         surnames = list(csv_reader)
@@ -172,19 +171,20 @@ def nationalize(name):
     if not nationalities:
         return "No nationality data available."
 
-    country_strings = []
+    nationalities_info = []
     for country in nationalities:
         country_code = country.get('country_id')
         probability = country.get('probability')
         if country_code and probability is not None:
             cur_country = pycountry.countries.get(alpha_2=country_code)
             country_name = cur_country.name if cur_country else country_code
-            prob_string = f"{country_name}" + \
-                " - probability: " + f"{round(probability * 100, 2)}%"
-            country_strings.append(prob_string)
-    final_nationalities = "\n".join(country_strings)
-
-    return 'Predicted nationalities:\n' + final_nationalities
+            country_info = {
+                'country_name': country_name,
+                'probability': round(probability * 100, 2)
+            }
+            # Append the dictionary to the list
+            nationalities_info.append(country_info)
+    return nationalities_info
 
 
 def genderize(name):
@@ -220,7 +220,7 @@ def agify(name):
     Uses agify.io API to predict and print the age associated with a given name.
 
     input:
-        name: string 
+        name: string
     output:
         string containing predicted age or error message
     """
@@ -251,10 +251,23 @@ def name_information(name, gender):
         array containing outputs from name meaning and predicted nationalities,
         age, and gender functions
     """
+
+    # format nationalize() output
+    nationalize_predictions = nationalize(name)
+    nationalize_formatted = []
+    # TODO: handle error better
+    if "error" in nationalize_predictions:
+        nationalize_formatted = nationalize_predictions["error"]
+    else:
+        for entry in nationalize_predictions:
+            formatted_string = f"{
+                entry['country_name']}" + " - predicted likelihood: " + f"{entry['probability']}%"
+            nationalize_formatted.append(formatted_string)
+
     return [
         name.capitalize(),
         get_name_meaning(name, gender),
-        *nationalize(name).split("\n"),
+        *nationalize_formatted,
         genderize(name),
         agify(name)
     ]
