@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-	<title>Generate a Random Name</title>
-</head>
-
-<body>
 	<h2>Generate a Random Name</h2>
 	<form method="post" action="/random_name">
 		<select name="gender">
@@ -30,5 +25,4 @@
 		{% endfor %}
 	</ul>
 	{% endif %}
-</body>
 {% endblock %}

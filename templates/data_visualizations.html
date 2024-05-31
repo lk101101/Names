@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-	<title>Interactive Altair Chart</title>
-</head>
-
-<body>
 	<form action="/data_visualizations" method="post">
 		<label for="name">Name:</label>
 		<input type="text" id="name" name="name" placeholder="Enter Name" required>
@@ -26,14 +21,13 @@
 		<input type="submit" value="Generate Chart">
 	</form>
 
-	<!-- Container for the visualization -->
 	{% if input_data and chart_json and chart_json2 %}
-	<h2>Displaying visualizations for {{ input_data[0] }} between {{ input_data[1] }}-{{input_data[2]}}</h2>
+	<h2>Displaying visualizations for {{ request.form['name'] }} between {{ request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
+	<!-- Container for the visualization -->
 	<div id="viz1"></div>
 	<div id="viz2"></div>
-	{% endif %}
 
-
+	{% block scripts %}
 	<script type="text/javascript">
 		// TODO: fix errors
 		var chart_spec = {{ chart_json | safe }};
@@ -43,5 +37,7 @@
 		var chart_spec2 = {{ chart_json2 | safe }};
 		vegaEmbed('#viz2', chart_spec2);
 	</script>
-</body>
+	{% endblock %}
+
+	{% endif %}
 {% endblock %}

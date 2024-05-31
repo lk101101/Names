@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <head>
-    <title>Get Information for a Name!</title>
-  </head>
-  <body>
     <h2>Get Information for a Name</h2>
     <form action="/name_information" method="post">
       <input type="text" name="name" placeholder="Name" required />
@@ -18,18 +14,20 @@
 
     <!-- Check if inputs have been passed to the template -->
     {% if texts and world_map %}
-    <h2>Name Information</h2>
-    <ul>
-      {% for text in texts %}
-      <li>{{ text }}</li>
-      {% endfor %}
-    </ul>
-    <!-- Container for the visualization -->
-    <div id="world_map"></div>
+      <h2>Name Information for '{{ request.form['name'] }}'</h2>
+      <ul>
+        {% for text in texts %}
+        <li>{{ text }}</li>
+        {% endfor %}
+      </ul>
+      <!-- Container for the visualization -->
+      <div id="world_map"></div>
+
+      {% block scripts %}
+        <script type="text/javascript">
+          var chart_spec = {{ world_map | safe }};
+          vegaEmbed('#world_map', chart_spec);
+        </script>
+      {% endblock %}
     {% endif %}    
-    <script type="text/javascript">
-      var chart_spec = {{ world_map | safe }};
-      vegaEmbed('#world_map', chart_spec);
-    </script>
-  </body>
 {% endblock %}
