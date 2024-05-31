@@ -42,11 +42,11 @@ def create_nationalize_map(name):
 
     countries_geojson = alt.topo_feature(data.world_110m.url, 'countries')
 
-    # Combine the colored countries and backgrounds into one chart
+    # world map background in grey
     world_background = alt.Chart(countries_geojson).mark_geoshape(
         fill='lightgrey',
     )
-    # Base chart for the colored countries
+    # chart for colored countries
     colored_countries = alt.Chart(countries_geojson).mark_geoshape(
         strokeWidth=0.5,
         stroke="black"
@@ -54,9 +54,8 @@ def create_nationalize_map(name):
         color=alt.condition(
             'datum.probability !== null',
             alt.Color('probability:Q', legend=alt.Legend(format=".0%"),
-                      # The variable to base the color on
                       title="Probability (%)"),
-            alt.value('lightgrey'),  # Default color when condition isn't met
+            alt.value('lightgrey'),
         ),
         tooltip=[alt.Tooltip('country_name:N', title='Country'),
                  alt.Tooltip('probability:Q', title='Probability', format=".0%")]
