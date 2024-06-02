@@ -73,6 +73,7 @@ def create_nationalize_map(name):
     return world_background + colored_countries
 
 
+# TODO: handle case for name without any data
 def simple_line_chart(df):
     """
     Create a line chart from a Pandas DataFrame that visualizes the frequency of a name over time.

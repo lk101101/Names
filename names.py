@@ -1,8 +1,9 @@
 """
-This module works with baby name data from the US Census, baby name websites, and APIs.
+Uses baby name data from the government, name websites, and APIs.
 Allows users to discover the popularity of a selected name,
 generate random names (both first and last names), and
-retrieve information about name meanings and predicted gender, age, and nationality.
+retrieve information about name meanings and
+predicted gender, age, and nationality.
 """
 import os
 from csv import reader
@@ -15,7 +16,7 @@ import pandas as pd
 
 def load_yearly_data(year, name, gender):
     """
-    Loads data for a specific year, name, and gender from the baby names dataset.
+    Loads data for a specific year, name, and gender from the names dataset.
 
     input:
         year: int
@@ -23,7 +24,7 @@ def load_yearly_data(year, name, gender):
         gender: string
 
     ouput:
-        the number of births associated with the given name and gender for that year;
+        number of births associated with given name and gender for that year;
             0 if name isn't found
     """
     file_name = f'names_files/yob{year}.txt'
@@ -41,7 +42,8 @@ def load_yearly_data(year, name, gender):
 
 def popularity(name, gender, start_year, end_year):
     """
-    Returns the number of occurrences of a given name for each year within a given range.
+    Returns the number of occurrences of a given name
+    for each year within a given range.
 
     input:
         name: string
@@ -81,7 +83,8 @@ def random_surname():
 
 def random_name(gender="", surname=False):
     """
-    Generates and prints a random name with options to specify gender and add surname(s).
+    Generates and prints a random name
+    with options to specify gender and add surname(s).
 
     input:
         gender: string ('m' or 'f'); default empty string ""
@@ -112,7 +115,8 @@ def random_name(gender="", surname=False):
 
 def get_name_meaning(name, gender):
     """
-    Scrapes NameBerry for the origin and meaning of the given name and prints the result.
+    Scrapes NameBerry for the origin and meaning
+    of the given name and prints the result.
 
     input:
         name: string
@@ -123,7 +127,8 @@ def get_name_meaning(name, gender):
     name = name.capitalize()
     headers = {
         'User-Agent':
-            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
+            'Mozilla/5.0 (Windows NT 6.1; WOW64)' +
+        ' AppleWebKit/537.36 (KHTML, like Gecko)'
             + ' Chrome/56.0.2924.76 Safari/537.36'
     }
 
@@ -142,14 +147,19 @@ def get_name_meaning(name, gender):
     soup = BeautifulSoup(r.text, 'html.parser')
     meaning = soup.find_all('div', {"class": "t-copy"})
 
-    meaning_text = '\n'.join(sentence.get_text(
-        strip=True) for sentence in meaning) if meaning else f'No information available for {name}.'
+    meaning_text = (
+        '\n'.join(
+            sentence.get_text(strip=True) for sentence in meaning
+        )
+        if meaning
+        else f'No information available for {name}.'
+    )
     return meaning_text
 
 
 def nationalize(name):
     """
-    Uses nationalize.io API to predict and print the nationality of a given name.
+    Uses nationalize.io API to predict nationality of a given name.
 
     input:
         name: string
@@ -165,7 +175,7 @@ def nationalize(name):
     except requests.exceptions.HTTPError as e:
         return f"HTTP error occurred: {e}"
     except requests.exceptions.RequestException as e:
-        return f"An error occurred while making the request to the Nationalize API: {e}"
+        return f"An error occurred (Nationalize API): {e}"
 
     nationalities = response.json().get('country', [])
     if not nationalities:
@@ -206,18 +216,19 @@ def genderize(name):
     except requests.exceptions.HTTPError as e:
         return f"HTTP error occurred: {e}"
     except requests.exceptions.RequestException as e:
-        return f"An error occurred while making the request to the Genderize API: {e}"
+        return f"An error occurred (Genderize API): {e}"
 
     data = response.json()
-    gender_info = f"Predicted gender: {data.get('gender', 'unknown')} - probability: {
-        round(data.get('probability', 0) * 100, 2)}%"
-
+    gender_info = (
+        f"Predicted gender: {data.get('gender', 'unknown')} - "
+        f"probability: {round(data.get('probability', 0) * 100, 2)}%"
+    )
     return gender_info
 
 
 def agify(name):
     """
-    Uses agify.io API to predict and print the age associated with a given name.
+    Uses agify.io API to predict age associated with a given name.
 
     input:
         name: string
@@ -229,20 +240,26 @@ def agify(name):
             f"https://api.agify.io?name={name}", timeout=10)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        return f"HTTP error occurred: {e.response.status_code} {e.response.reason}"
+        return (
+            "HTTP error occurred: "
+            f"{e.response.status_code} {e.response.reason}"
+        )
     except requests.exceptions.Timeout:
         return "The request to the Agify API timed out."
     except requests.exceptions.RequestException as e:
-        return f"An error occurred while making the request to the Agify API: {e}"
+        return f"An error occurred (Agify API): {e}"
 
     data = response.json()
     age = data.get('age', 'unknown')
-    return f"Predicted age: {age}" if age != "unknown" else f"No age prediction for name {name}."
+    return (f"Predicted age: {age}" if age != "unknown"
+            else f"No age prediction for name {name}.")
 
 
+# TODO: handle error output from nationalize()
 def name_information(name, gender):
     """
-    Outputs a specified name's meaning and predicted gender, age, and nationality.
+    Outputs a specified name's meaning and
+    predicted gender, age, and nationality.
 
     input:
         name: string
@@ -255,17 +272,18 @@ def name_information(name, gender):
     # format nationalize() output
     nationalize_predictions = nationalize(name)
     nationalize_formatted = []
-    # TODO: handle error better
-    if "error" in nationalize_predictions:
-        nationalize_formatted = nationalize_predictions["error"]
+
+    if nationalize_predictions == "No nationality data available.":
+        nationalize_formatted = nationalize_predictions
     else:
         for entry in nationalize_predictions:
-            formatted_string = f"{
-                entry['country_name']}" + " - predicted likelihood: " + f"{entry['probability']}%"
+            formatted_string = (
+                f"{entry['country_name']} - predicted likelihood: "
+                f"{entry['probability'] * 100:.2f}%"
+            )
             nationalize_formatted.append(formatted_string)
 
     return [
-        name.capitalize(),
         get_name_meaning(name, gender),
         *nationalize_formatted,
         genderize(name),

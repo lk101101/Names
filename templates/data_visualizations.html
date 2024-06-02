@@ -21,23 +21,27 @@
 		<input type="submit" value="Generate Chart">
 	</form>
 
-	{% if input_data and chart_json and chart_json2 %}
-	<h2>Displaying visualizations for {{ request.form['name'] }} between {{ request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
-	<!-- Container for the visualization -->
-	<div id="viz1"></div>
-	<div id="viz2"></div>
+	{% if chart_json != '{}' and chart_json2 != '{}' %}
+    <h2>Displaying visualizations for {{ request.form['name'].capitalize() }} between {{ request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
+    <div id="viz1"></div>
+    <div id="viz2"></div>
 
-	{% block scripts %}
-	<script type="text/javascript">
-		// TODO: fix errors
-		var chart_spec = {{ chart_json | safe }};
-		vegaEmbed('#viz1', chart_spec);
+    {% block scripts %}
+    <script type="text/javascript">
+		var chartSpecJson = {{ chart_json | safe }};
+		var chartSpec2Json = {{ chart_json2 | safe }};
 
-		// 2nd viz
-		var chart_spec2 = {{ chart_json2 | safe }};
-		vegaEmbed('#viz2', chart_spec2);
-	</script>
-	{% endblock %}
+		// check if chart jsons are empty
+		if (chartSpecJson && JSON.stringify(chartSpecJson) !== '{}') {
+			var chart_spec = chartSpecJson;
+			vegaEmbed('#viz1', chart_spec);
+		}
 
-	{% endif %}
+		if (chartSpec2Json && JSON.stringify(chartSpec2Json) !== '{}') {
+			var chart_spec2 = chartSpec2Json;
+			vegaEmbed('#viz2', chart_spec2);
+		}
+    </script>
+    {% endblock %}
+    {% endif %}
 {% endblock %}

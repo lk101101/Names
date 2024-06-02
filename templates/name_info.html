@@ -13,8 +13,9 @@
     </form>
 
     <!-- Check if inputs have been passed to the template -->
-    {% if texts and world_map %}
-      <h2>Name Information for '{{ request.form['name'] }}'</h2>
+
+    {% if texts and world_map_json != '{}' %}
+      <h2>Name Information for '{{ request.form['name'].capitalize() }}'</h2>
       <ul>
         {% for text in texts %}
         <li>{{ text }}</li>
@@ -25,8 +26,12 @@
 
       {% block scripts %}
         <script type="text/javascript">
-          var chart_spec = {{ world_map | safe }};
-          vegaEmbed('#world_map', chart_spec);
+          var worldMapJson = {{ world_map_json | safe }};
+
+          if (worldMapJson && JSON.stringify(worldMapJson) !== '{}') {
+            var chart_spec = worldMapJson;
+            vegaEmbed('#world_map', chart_spec);
+          }
         </script>
       {% endblock %}
     {% endif %}    
