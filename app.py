@@ -1,5 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
-import altair as alt
+from flask import Flask, request, render_template
 import names
 import visualizations
 
