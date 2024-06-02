@@ -35,7 +35,7 @@ def data_visualizations():
         line_chart_json = line_chart.to_json()
         heatmap_json = heatmap.to_json()
 
-        return render_template('data_visualizations.html', input_data=[name.capitalize(), start_year, end_year], chart_json=line_chart_json, chart_json2=heatmap_json)
+        return render_template('data_visualizations.html', chart_json=line_chart_json, chart_json2=heatmap_json)
 
     # TODO: fix?
     return render_template('data_visualizations.html', chart_json="{}")
