@@ -21,6 +21,7 @@ jupyterlab_widgets==3.0.10
 matplotlib==3.8.3
 matplotlib-inline==0.1.6
 numpy==1.26.3
+openpyxl==3.1.4
 pandas==2.2.0
 pip==23.3.1
 pycountry==22.3.5

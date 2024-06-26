@@ -70,15 +70,18 @@ def random_surname():
     output:
         string (surname)
     """
-    with open("names_files/2010CensusSurnames.csv", encoding='utf-8-sig') as f:
+    with open("names_files/surnames.csv", encoding='utf-8-sig') as f:
         csv_reader = reader(f)
-        # skip first two rows in file
-        next(csv_reader)
-        next(csv_reader)
-        surnames = list(csv_reader)
-        random_line = random.choice(surnames)
-        sur = random_line[0].lower()
-        return sur.capitalize()
+        # skip first 3 rows in file
+        for _ in range(3):
+            next(csv_reader)
+
+        total_surnames = list(csv_reader)
+
+        # remove last 3 rows of file
+        random_line = random.choice(total_surnames[:-3])
+        surname = random_line[0].lower()
+        return surname.capitalize()
 
 
 def random_name(gender="", surname=False):
@@ -152,7 +155,7 @@ def get_name_meaning(name, gender):
             sentence.get_text(strip=True) for sentence in meaning
         )
         if meaning
-        else f'No information available for {name}.'
+        else f'Error: No information available for {name}.'
     )
     return meaning_text
 
@@ -179,7 +182,7 @@ def nationalize(name):
 
     nationalities = response.json().get('country', [])
     if not nationalities:
-        return "No nationality data available."
+        return "Error: No nationality data available."
 
     nationalities_info = []
     for country in nationalities:
@@ -252,7 +255,7 @@ def agify(name):
     data = response.json()
     age = data.get('age', 'unknown')
     return (f"Predicted age: {age}" if age != "unknown"
-            else f"No age prediction for name {name}.")
+            else f"Error: No age prediction for name {name}.")
 
 
 # TODO: handle error output from nationalize()
@@ -273,7 +276,7 @@ def name_information(name, gender):
     nationalize_predictions = nationalize(name)
     nationalize_formatted = []
 
-    if nationalize_predictions == "No nationality data available.":
+    if nationalize_predictions == "Error: No nationality data available.":
         nationalize_formatted = nationalize_predictions
     else:
         for entry in nationalize_predictions:
