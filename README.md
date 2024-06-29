@@ -9,10 +9,11 @@ The US Social Security Administration (SSA) publishes annual lists of baby names
 3. Creates data visualizations to display the changes in a name's popularity throughout a specified range of years
 
 Currently, the only options for gender are male (m) and female (f).
-For all of the annual datasets (CSV files ranging all the way to 1880), download 'National data' on the SSA site: https://www.ssa.gov/oact/babynames/limits.html . I have included the files for the years 2000 and 2020 in 'name_files' folder.
-
-For full list of surnames from 2010 Census, download the Excel file on https://www.census.gov/topics/population/genealogy/data/2010_surnames.html . I have included a small sample CSV file for the top 20 surnames but the complete file has 65k+ surnames.
 
 # How to Download and Run Code
 
-In your Terminal, run ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory. Navigate to the new folder called Names. Create a Python environment (i.e. 'python -m venv env', then 'source env/bin/activate') and run 'pip install -r requirements.txt' to download the required packages. Run 'flask run' to start the Flask server and navigate to http://127.0.0.1:5000 in your web browser. 
+* In your Terminal, run ' git clone https://github.com/lk101101/Names ' to clone this repo into your directory.
+* Navigate to the new folder called Names.
+* Create a Python environment (i.e. 'python -m venv env', then 'source env/bin/activate') and run 'pip install -r requirements.txt' to download the required packages.
+* Run 'python gather_data.py' to download the required datasets ('National Data' from https://www.ssa.gov/oact/babynames/limits.html and 'Surnames Occurring 100+ Times' from https://www.census.gov/topics/population/genealogy/data/2010_surnames.html). The names_files folder contains a small sample of both datasets. 
+* Run 'flask run' to start the Flask server and navigate to http://127.0.0.1:5000 in your web browser. 
