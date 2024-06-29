@@ -25,11 +25,12 @@ def get_country_id(country_name):
 
 def create_nationalize_map(name):
     """
-    Create a world map visualization that shows the probabilities ( in percentages) of a given name being from different countries.
+    Create a world map visualization that shows the probabilities (in percentages) of a given name being from different countries.
 
     input:
         name: string
-    output: choropleth world map showcasing the five most probable countries of origin for a given name
+    output: 
+        choropleth world map showcasing the five most probable countries of origin for a given name
     """
     nationalize_predictions = names.nationalize(name)
     nationalities_df = pd.DataFrame(nationalize_predictions)

@@ -1,5 +1,5 @@
 """
-Uses baby name data from the government, name websites, and APIs.
+Use baby name data from the government, name websites, and APIs.
 Allows users to discover the popularity of a selected name,
 generate random names (both first and last names), and
 retrieve information about name meanings and
@@ -9,6 +9,7 @@ import os
 from csv import reader
 import random
 import requests
+from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
 import pycountry
 import pandas as pd
@@ -16,7 +17,7 @@ import pandas as pd
 
 def load_yearly_data(year, name, gender):
     """
-    Loads data for a specific year, name, and gender from the names dataset.
+    Load data for a specific year, name, and gender from the names dataset.
 
     input:
         year: int
@@ -42,7 +43,7 @@ def load_yearly_data(year, name, gender):
 
 def popularity(name, gender, start_year, end_year):
     """
-    Returns the number of occurrences of a given name
+    Return the number of occurrences of a given name
     for each year within a given range.
 
     input:
@@ -65,7 +66,7 @@ def popularity(name, gender, start_year, end_year):
 
 def random_surname():
     """
-    Selects and returns a random surname from the surnames file.
+    Select and return a random surname from the surnames file.
 
     output:
         string (surname)
@@ -86,7 +87,7 @@ def random_surname():
 
 def random_name(gender="", surname=False):
     """
-    Generates and prints a random name
+    Generate and print a random name
     with options to specify gender and add surname(s).
 
     input:
@@ -118,7 +119,7 @@ def random_name(gender="", surname=False):
 
 def get_name_meaning(name, gender):
     """
-    Scrapes NameBerry for the origin and meaning
+    Scrape NameBerry for the origin and meaning
     of the given name and prints the result.
 
     input:
@@ -162,7 +163,7 @@ def get_name_meaning(name, gender):
 
 def nationalize(name):
     """
-    Uses nationalize.io API to predict nationality of a given name.
+    Use nationalize.io API to predict nationality of a given name.
 
     input:
         name: string
@@ -202,7 +203,7 @@ def nationalize(name):
 
 def genderize(name):
     """
-    Uses genderize.io API to predict and print the gender of a given name.
+    Use genderize.io API to predict and print the gender of a given name.
 
     input:
         name: string
@@ -231,7 +232,7 @@ def genderize(name):
 
 def agify(name):
     """
-    Uses agify.io API to predict age associated with a given name.
+    Use agify.io API to predict age associated with a given name.
 
     input:
         name: string
@@ -258,10 +259,78 @@ def agify(name):
             else f"Error: No age prediction for name {name}.")
 
 
+def spotify_track(name):
+    """
+    Retrieve data for first track that matches a given name on Spotify.
+    Example: 'Rhiannon' -> 'Rhiannon' by Fleetwood Mac
+
+    input:
+        name: string
+    output: 
+        dictionary of strings (track name, artist name, Spotify URL)
+    """
+
+    # ** Add client credentials here **
+    client_id = 'YOUR_CLIENT_ID'
+    client_secret = 'YOUR_CLIENT_SECRET'
+
+    token_url = "https://accounts.spotify.com/api/token"
+
+    # Make POST request to retrieve access token to Spotify API
+    try:
+        response = requests.post(token_url,
+                                 data={"grant_type": "client_credentials"},
+                                 auth=HTTPBasicAuth(client_id, client_secret), timeout=10)
+        response.raise_for_status()
+    except requests.exceptions.Timeout:
+        return "The request timed out."
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred while requesting token: {e}"
+
+    token = response.json().get('access_token')
+
+    if not token:
+        return "Error: Unable to retrieve access token from Spotify API."
+
+    # Make GET request for first track that matches name
+    search_url = "https://api.spotify.com/v1/search"
+    search_headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    search_params = {
+        "q": name,
+        "type": "track",
+        "limit": 1
+    }
+
+    try:
+        search_response = requests.get(
+            search_url, headers=search_headers, params=search_params, timeout=10)
+        search_response.raise_for_status()
+    except requests.exceptions.Timeout:
+        return "The request timed out."
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred during search: {e}"
+
+    search_results = search_response.json()
+
+    # Get track name, artist, and Spotify URL from the search results
+    items = search_results['tracks']['items'][0]
+
+    track_data = {
+        "track_name": items['name'],
+        "artist_name": items['artists'][0]['name'],
+        "spotify_url": items['external_urls']['spotify']
+    }
+
+    return track_data
+
 # TODO: handle error output from nationalize()
+
+
 def name_information(name, gender):
     """
-    Outputs a specified name's meaning and
+    Output a specified name's meaning and
     predicted gender, age, and nationality.
 
     input:
