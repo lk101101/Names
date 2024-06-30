@@ -38,7 +38,6 @@ def data_visualizations():
         "chart_json2": "{}",
     }
     if request.method == 'POST':
-        # Collect form data
         name = request.form.get('name')
         gender = request.form.get('gender', default='').lower()
         start_year = int(request.form.get('start_year'))

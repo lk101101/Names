@@ -111,7 +111,7 @@ def random_name(gender="", surname=False):
     first_name = name_details[0]
 
     if surname:
-        sur = random_surname()  # Assuming you have a random_surname function
+        sur = random_surname()
         first_name += f" {sur}"
 
     return first_name
@@ -143,7 +143,6 @@ def get_name_meaning(name, gender):
     except requests.exceptions.Timeout:
         return "The request timed out."
     except requests.exceptions.HTTPError:
-        # return f"HTTP Error: {e}"
         return f"Error: No information found on NameBerry for {name}"
     except requests.exceptions.RequestException as e:
         return f"An error occurred while making the request: {e}"
@@ -196,7 +195,7 @@ def nationalize(name):
                 'country_name': country_name,
                 'probability': round(probability * 100, 2)
             }
-            # Append the dictionary to the list
+            # Append dictionary to list
             nationalities_info.append(country_info)
     return nationalities_info
 
