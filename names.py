@@ -321,8 +321,6 @@ def spotify_track(name):
 
     return track_data
 
-# TODO: handle error output from nationalize()
-
 
 def name_information(name, gender):
     """
@@ -341,7 +339,9 @@ def name_information(name, gender):
     nationalize_predictions = nationalize(name)
     nationalize_formatted = []
 
+    # check if string (error)
     if not isinstance(nationalize_predictions, list):
+        # format as list to unpack in return statement
         nationalize_formatted = [nationalize_predictions]
     else:
         for entry in nationalize_predictions:

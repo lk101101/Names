@@ -34,10 +34,9 @@ def create_nationalize_map(name):
     """
     nationalize_predictions = names.nationalize(name)
     nationalities_df = pd.DataFrame(nationalize_predictions)
-    # divide probabilities by 100 to represent percentages properly
     # retrieve numeric forms of country ids to identify countries
     nationalities_df = nationalities_df.assign(
-        probability=lambda x: x['probability'] / 100,
+        probability=lambda x: x['probability'],
         id=lambda x: x['country_name'].apply(get_country_id)
     ).dropna(subset=['id'])
 
@@ -116,7 +115,7 @@ def popularity_heatmap(df):
     threshold = df['Births'].quantile(0.85)
 
     select_checkbox = alt.param(
-        bind=alt.binding_checkbox(name="Show grid and text"),
+        bind=alt.binding_checkbox(name="Show grid and labels"),
     )
 
     heatmap = alt.Chart(df).mark_rect().encode(
@@ -128,6 +127,7 @@ def popularity_heatmap(df):
             legend=alt.Legend(title="Number of Births",
                               values=[min_births, max_births])),
         tooltip=['Year:O', 'Births:Q'],
+        # add grid outlines if toggled on
         stroke=alt.condition(
             select_checkbox, alt.value('black'), alt.value(None))
     ).properties(

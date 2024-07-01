@@ -1,47 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<form action="/data_visualizations" method="post">
-		<label for="name">Name:</label>
-		<input type="text" id="name" name="name" placeholder="Enter Name" required>
-	
-		<label for="gender">Gender:</label>
-		<select id="gender" name="gender" required>
-			<option value="">Please select</option>
-			<option value="m">Boy</option>
-			<option value="f">Girl</option>
-		</select>
-	
-		<label for="start_year">Start Year:</label>
-		<input type="number" id="start_year" name="start_year" min="1880" max="2022" placeholder="1880" required>
-	
-		<label for="end_year">End Year:</label>
-		<input type="number" id="end_year" name="end_year" min="1880" max="2022" placeholder="2022" required>
-	
-		<input type="submit" value="Generate Chart">
+<div class="container my-5">
+	<form action="/data_visualizations" method="post" class="row g-3">
+		<div class="col-md-6">
+			<label for="name" class="form-label">Name:</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
+		</div>
+
+		<div class="col-md-6">
+			<label for="gender" class="form-label">Gender:</label>
+			<select class="form-select" id="gender" name="gender" required>
+				<option value="">Select a gender</option>
+				<option value="m">Boy</option>
+				<option value="f">Girl</option>
+			</select>
+		</div>
+
+		<div class="col-md-6">
+			<label for="start_year" class="form-label">Start year</label>
+			<input type="number" class="form-control" id="start_year" name="start_year" min="1880" max="2022"
+				placeholder="1880" required>
+		</div>
+
+		<div class="col-md-6">
+			<label for="end_year" class="form-label">End year</label>
+			<input type="number" class="form-control" id="end_year" name="end_year" min="1880" max="2022"
+				placeholder="2022" required>
+		</div>
+
+		<div class="col-12">
+			<button type="submit" class="btn btn-primary">Generate chart</button>
+		</div>
+
 	</form>
 
 	{% if chart_json != '{}' and chart_json2 != '{}' %}
-    <h2>Displaying visualizations for {{ request.form['name'].capitalize() }} between {{ request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
-    <div id="viz1"></div>
-    <div id="viz2"></div>
+	<h2 class="mt-4">Displaying visualizations for {{ request.form['name'].capitalize() }} between {{
+		request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
+	<div id="viz1" class="mb-4"></div>
+	<div id="viz2" class="mb-4"></div>
 
-    {% block scripts %}
-    <script type="text/javascript">
+	{% block scripts %}
+	<script type="text/javascript">
 		var chartSpecJson = {{ chart_json | safe }};
 		var chartSpec2Json = {{ chart_json2 | safe }};
 
-		// check if chart jsons are empty
 		if (chartSpecJson && JSON.stringify(chartSpecJson) !== '{}') {
-			var chart_spec = chartSpecJson;
-			vegaEmbed('#viz1', chart_spec);
+			vegaEmbed('#viz1', chartSpecJson);
 		}
 
 		if (chartSpec2Json && JSON.stringify(chartSpec2Json) !== '{}') {
-			var chart_spec2 = chartSpec2Json;
-			vegaEmbed('#viz2', chart_spec2);
+			vegaEmbed('#viz2', chartSpec2Json);
 		}
-    </script>
-    {% endblock %}
-    {% endif %}
+	</script>
+	{% endblock %}
+	{% endif %}
+</div>
 {% endblock %}

@@ -1,31 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Name App</title>
-</head>
-
-<body>
-  <h1>Welcome to the Name App!</h1>
+{% block content %}
+<div class="container text-center mt-5">
+  <h1 class="display-4">The Name App</h1>
 
   <!-- Random Name Generator -->
-  <h2>Generate a Random Name</h2>
-  <form action="/random_name">
-    <input type="submit" value="Generate">
-  </form>
+  <div class="mt-4">
+    <h2><button type="button" class="btn btn-primary" onclick="location.href='/random_name'">Generate a Random
+        Name</button></h2>
+    <p>Generate random first and last names!</p>
+  </div>
 
   <!-- Name Information -->
-  <h2>Get Name Information</h2>
-  <form action="/name_information">
-    <input type="submit" value="Get Information">
-  </form>
+  <div class="mt-4">
+    <h2><button type="button" class="btn btn-primary" onclick="location.href='/name_information'">Get Name
+        Information</button></h2>
+    <p>Retrieve information about a name's meaning, origin, and more!</p>
+  </div>
 
-  <!-- TO DO -->
-  <h2>Create Visualizations</h2>
-  <form action="/data_visualizations">
-    <input type="submit" value="Get Information">
-  </form>
-</body>
+  <!-- Visualizations -->
+  <div class="mt-4">
+    <h2><button type="button" class="btn btn-primary" onclick="location.href='/data_visualizations'">Create
+        Visualizations</button></h2>
+    <p>Learn more about the popularity of a name of your choice!</p>
+  </div>
 
-</html>
+  <!-- <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+      <span class="mb-3 mb-md-0 text-body-secondary">Created by Lara</span>
+    </div>
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+      <li class="ms-3">
+        <a class="text-body-secondary">
+          <svg class="bi" width="24" height="24">
+            <use xlink:href="https://github.com/lk101101/Names"></use>
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </footer> -->
+
+</div>
+{% endblock %}
