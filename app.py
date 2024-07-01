@@ -100,8 +100,9 @@ def name_information():
         template_data["texts"] = names.name_information(name, gender)
         # ** Uncomment to display song matching name from Spotify API
         # template_data["spotify_data"] = names.spotify_track(name)
-        world_map = visualizations.create_nationalize_map(name)
-        template_data["world_map_json"] = world_map.to_json()
+        if isinstance(names.nationalize(name), list):
+            world_map = visualizations.create_nationalize_map(name)
+            template_data["world_map_json"] = world_map.to_json()
     return render_template('name_info.html', **template_data)
 
 

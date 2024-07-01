@@ -14,7 +14,7 @@
 
     <!-- Check if inputs have been passed to the template -->
 
-    {% if texts and world_map_json != '{}' %}
+    {% if texts %}
       <h2>Name Information for '{{ request.form['name'].capitalize() }}'</h2>
       <ul>
         {% for text in texts %}
@@ -22,24 +22,26 @@
         {% endfor %}
       </ul>
 
-      <!-- TODO: Spotify integration
-      {% for key, value in spotify_data.items()  %}
-      <div> {{ key }}: {{ value }} </div>
-      {% endfor %}
-      -->
+    {# TODO: uncomment for Spotify integration
+    {% for key, value in spotify_data.items() %}
+    <div> {{ key }}: {{ value }} </div>
+    {% endfor %}
+    #}
 
       <!-- Container for the visualization -->
-      <div id="world_map"></div>
+      {% if world_map_json != '{}' %}
+        <div id="world_map"></div>
 
-      {% block scripts %}
-        <script type="text/javascript">
-          var worldMapJson = {{ world_map_json | safe }};
+        {% block scripts %}
+          <script type="text/javascript">
+            var worldMapJson = {{ world_map_json | safe }};
 
-          if (worldMapJson && JSON.stringify(worldMapJson) !== '{}') {
-            var chart_spec = worldMapJson;
-            vegaEmbed('#world_map', chart_spec);
-          }
-        </script>
-      {% endblock %}
+            if (worldMapJson && JSON.stringify(worldMapJson) !== '{}') {
+              var chart_spec = worldMapJson;
+              vegaEmbed('#world_map', chart_spec);
+            }
+          </script>
+        {% endblock %}
+      {% endif %}
     {% endif %}    
 {% endblock %}

@@ -193,7 +193,7 @@ def nationalize(name):
             country_name = cur_country.name if cur_country else country_code
             country_info = {
                 'country_name': country_name,
-                'probability': round(probability * 100, 2)
+                'probability': probability
             }
             # Append dictionary to list
             nationalities_info.append(country_info)
@@ -243,10 +243,7 @@ def agify(name):
             f"https://api.agify.io?name={name}", timeout=10)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        return (
-            "HTTP error occurred: "
-            f"{e.response.status_code} {e.response.reason}"
-        )
+        return f"HTTP error occurred: {e}"
     except requests.exceptions.Timeout:
         return "The request to the Agify API timed out."
     except requests.exceptions.RequestException as e:
@@ -344,8 +341,8 @@ def name_information(name, gender):
     nationalize_predictions = nationalize(name)
     nationalize_formatted = []
 
-    if nationalize_predictions == "Error: No nationality data available.":
-        nationalize_formatted = nationalize_predictions
+    if not isinstance(nationalize_predictions, list):
+        nationalize_formatted = [nationalize_predictions]
     else:
         for entry in nationalize_predictions:
             formatted_string = (
