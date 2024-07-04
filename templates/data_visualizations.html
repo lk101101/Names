@@ -36,10 +36,13 @@
 	</form>
 
 	{% if chart_json != '{}' and chart_json2 != '{}' %}
-	<h2 class="mt-4">Displaying visualizations for {{ request.form['name'].capitalize() }} between {{
-		request.form['start_year'] }}-{{ request.form['end_year'] }}</h2>
-	<div id="viz1" class="mb-4"></div>
-	<div id="viz2" class="mb-4"></div>
+	<h2 class="mt-4">Displaying visualizations for 
+		<span style="color: blue;">{{ request.form['name'].capitalize() }} </span> between <span style="color: blue;">{{
+		request.form['start_year'] }}-{{ request.form['end_year'] }}
+		</span>
+	</h2>
+	<div id="viz1" class="mb-2"></div>
+	<div id="viz2" class="mb-2"></div>
 
 	{% block scripts %}
 	<script type="text/javascript">

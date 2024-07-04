@@ -177,12 +177,25 @@ def nationalize(name):
         return "The request to the Nationalize API timed out."
     except requests.exceptions.HTTPError as e:
         return f"HTTP error occurred: {e}"
+
     except requests.exceptions.RequestException as e:
         return f"An error occurred (Nationalize API): {e}"
 
     nationalities = response.json().get('country', [])
     if not nationalities:
         return "Error: No nationality data available."
+    return nationalities
+
+
+def format_nationalize_info(nationalities):
+    """
+    Format Nationalize API results to contain country names.
+
+    input:
+        nationalities: list of dictionary containing results from Nationalize API 
+    output:
+        list containing results converted from country code to country name (i.e. AU -> Australia)
+    """
 
     nationalities_info = []
     for country in nationalities:
@@ -336,14 +349,15 @@ def name_information(name, gender):
     """
 
     # format nationalize() output
-    nationalize_predictions = nationalize(name)
-    nationalize_formatted = []
+    nationalize_output = nationalize(name)
 
     # check if string (error)
-    if not isinstance(nationalize_predictions, list):
+    if not isinstance(nationalize_output, list):
         # format as list to unpack in return statement
-        nationalize_formatted = [nationalize_predictions]
+        nationalize_formatted = [nationalize_output]
     else:
+        nationalize_predictions = format_nationalize_info(nationalize_output)
+        nationalize_formatted = []
         for entry in nationalize_predictions:
             formatted_string = (
                 f"{entry['country_name']} - predicted likelihood: "

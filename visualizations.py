@@ -18,7 +18,7 @@ def get_country_id(country_name):
         numeric country code or None: string
     """
     try:
-        return pycountry.countries.lookup(country_name).numeric
+        return pycountry.countries.get(alpha_2=country_name).numeric
     except LookupError:
         return None
 
@@ -32,48 +32,48 @@ def create_nationalize_map(name):
     output: 
         choropleth world map showcasing the five most probable countries of origin for a given name
     """
-    nationalize_predictions = names.nationalize(name)
-    nationalities_df = pd.DataFrame(nationalize_predictions)
-    # retrieve numeric forms of country ids to identify countries
-    nationalities_df = nationalities_df.assign(
-        probability=lambda x: x['probability'],
-        id=lambda x: x['country_name'].apply(get_country_id)
-    ).dropna(subset=['id'])
+    predictions = names.nationalize(name)
+
+    for prediction in predictions:
+        country_id = get_country_id(prediction['country_id'])
+        if country_id:
+            prediction['id'] = int(country_id)
+
+    # Create a DataFrame from the processed predictions
+    df = pd.DataFrame([p for p in predictions if 'id' in p])
+
+    print(df)
 
     countries_geojson = alt.topo_feature(data.world_110m.url, 'countries')
 
     # world map background in grey
-    world_background = alt.Chart(countries_geojson).mark_geoshape(
+    world_map = alt.Chart(countries_geojson).mark_geoshape(
         fill='lightgrey',
     )
     # chart for colored countries
-    colored_countries = alt.Chart(countries_geojson).mark_geoshape(
-        strokeWidth=0.5,
-        stroke="black"
+    probability_layer = alt.Chart(countries_geojson).mark_geoshape(
+        stroke='black'
     ).encode(
-        color=alt.condition(
-            'datum.probability !== null',
-            alt.Color('probability:Q', legend=alt.Legend(format=".0%"),
-                      title="Probability (%)"),
-            alt.value('lightgrey'),
-        ),
-        tooltip=[alt.Tooltip('country_name:N', title='Country'),
-                 alt.Tooltip('probability:Q', title='Probability', format=".0%")]
+        color=alt.Color('probability:Q',
+                        legend=alt.Legend(title="Probability")),
+        tooltip=[
+            alt.Tooltip('country_id:N', title='Country'),
+            alt.Tooltip('probability:Q', title='Probability', format='.2%')
+        ]
     ).transform_lookup(
         lookup='id',
-        from_=alt.LookupData(nationalities_df, 'id', [
-            'country_name', 'probability'])
+        from_=alt.LookupData(data=df, key='id', fields=[
+                             'country_id', 'probability'])
     ).project(
-        type='equirectangular'
+        'equirectangular'
     ).properties(
-        width=500,
+        width=1000,
         height=400
     )
 
-    return world_background + colored_countries
+    return world_map + probability_layer
 
 
-# TODO: handle case for name without any data
 def simple_line_chart(df):
     """
     Create a line chart from a Pandas DataFrame that visualizes the frequency of a name over time.
