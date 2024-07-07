@@ -114,7 +114,3 @@ def name_information():
             world_map = visualizations.create_nationalize_map(last)
             template_data["world_map_json"] = world_map.to_json()
     return render_template('name_info.html', **template_data)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
