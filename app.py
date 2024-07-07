@@ -96,12 +96,22 @@ def name_information():
         name = request.form.get('name', '')
         gender = request.form.get('gender', '')
 
-        # TODO: fix formatting
-        template_data["texts"] = names.name_information(name, gender)
+        # get first and last names if provided
+        first, last = names.split_full_name(name)
+
+        name_meaning = names.get_name_meaning(first, gender)
+        nationalize_results = names.get_formatted_nationality(last)
+        gender_predictions = names.genderize(first)
+        age_prediction = names.agify(first)
+
+        template_data["texts"] = [name_meaning, *
+                                  nationalize_results, gender_predictions, age_prediction]
         # ** Uncomment to display song matching name from Spotify API
         # template_data["spotify_data"] = names.spotify_track(name)
-        if isinstance(names.nationalize(name), list):
-            world_map = visualizations.create_nationalize_map(name)
+
+        # display map if no errors with nationalize
+        if isinstance(names.nationalize(last), list):
+            world_map = visualizations.create_nationalize_map(last)
             template_data["world_map_json"] = world_map.to_json()
     return render_template('name_info.html', **template_data)
 

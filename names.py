@@ -66,7 +66,7 @@ def popularity(name, gender, start_year, end_year):
 
 def random_surname():
     """
-    Select and return a random surname from the surnames file.
+    Select random surname from the surnames file.
 
     output:
         string (surname)
@@ -79,7 +79,7 @@ def random_surname():
 
         total_surnames = list(csv_reader)
 
-        # remove last 3 rows of file
+        # ignore last 3 rows of file
         random_line = random.choice(total_surnames[:-3])
         surname = random_line[0].lower()
         return surname.capitalize()
@@ -87,14 +87,14 @@ def random_surname():
 
 def random_name(gender="", surname=False):
     """
-    Generate and print a random name
-    with options to specify gender and add surname(s).
+    Generate random name with options to 
+    specify gender and generate random surname.
 
     input:
         gender: string ('m' or 'f'); default empty string ""
         surname: boolean; default False
     output:
-        string: random first and/or last name
+        string: random first and/or last name(s)
     """
     year = str(random.randrange(1880, 2020))
     file_name = f'names_files/yob{year}.txt'
@@ -108,19 +108,19 @@ def random_name(gender="", surname=False):
 
     cur_line = random.choice(lines)
     name_details = cur_line.strip().split(',')
-    first_name = name_details[0]
+    full_name = name_details[0]
 
     if surname:
         sur = random_surname()
-        first_name += f" {sur}"
+        full_name += f" {sur}"
 
-    return first_name
+    return full_name
 
 
 def get_name_meaning(name, gender):
     """
     Scrape NameBerry for the origin and meaning
-    of the given name and prints the result.
+    of the given name.
 
     input:
         name: string
@@ -162,7 +162,7 @@ def get_name_meaning(name, gender):
 
 def nationalize(name):
     """
-    Use nationalize.io API to predict nationality of a given name.
+    Use nationalize.io API to predict nationality of a given name (recommended to use last names).
 
     input:
         name: string
@@ -187,9 +187,9 @@ def nationalize(name):
     return nationalities
 
 
-def format_nationalize_info(nationalities):
+def get_country_codes(nationalities):
     """
-    Format Nationalize API results to contain country names.
+    Format Nationalize API results to contain full country names.
 
     input:
         nationalities: list of dictionary containing results from Nationalize API 
@@ -213,9 +213,38 @@ def format_nationalize_info(nationalities):
     return nationalities_info
 
 
+def get_formatted_nationality(last_name):
+    """
+    Predict nationality using the nationalize() function and 
+    format the output to display on user interface.
+
+    input:
+        last_name: string
+    output:
+        list containing formatted nationality predictions or  error message
+    """
+    nationalize_output = nationalize(last_name)
+
+    # check if output is error
+    if not isinstance(nationalize_output, list):
+        return [nationalize_output]
+
+    # reformat data to be readable strings
+    nationalize_predictions = get_country_codes(nationalize_output)
+    nationalize_formatted = []
+    for entry in nationalize_predictions:
+        formatted_string = (
+            f"{entry['country_name']} - predicted likelihood: "
+            f"{entry['probability'] * 100:.2f}%"
+        )
+        nationalize_formatted.append(formatted_string)
+
+    return nationalize_formatted
+
+
 def genderize(name):
     """
-    Use genderize.io API to predict and print the gender of a given name.
+    Use genderize.io API to predict the gender of a given name.
 
     input:
         name: string
@@ -244,7 +273,7 @@ def genderize(name):
 
 def agify(name):
     """
-    Use agify.io API to predict age associated with a given name.
+    Use agify.io API to predict age of a given name.
 
     input:
         name: string
@@ -335,39 +364,20 @@ def spotify_track(name):
     return track_data
 
 
-def name_information(name, gender):
-    """
-    Output a specified name's meaning and
-    predicted gender, age, and nationality.
+def split_full_name(name):
+    """ 
+    Split full name into first and last names if 2 names are entered;
+    otherwise, both names will be set to the first name
 
     input:
         name: string
-        gender: string (either 'boy' or 'girl')
     output:
-        array containing outputs from name meaning and predicted nationalities,
-        age, and gender functions
+        tuple of strings (first and/or last names)
     """
+    name_parts = name.split()
+    first_name = name_parts[0].strip()
 
-    # format nationalize() output
-    nationalize_output = nationalize(name)
+    # set last name to first if only 1 name provided
+    last_name = name_parts[1].strip() if len(name_parts) > 1 else first_name
 
-    # check if string (error)
-    if not isinstance(nationalize_output, list):
-        # format as list to unpack in return statement
-        nationalize_formatted = [nationalize_output]
-    else:
-        nationalize_predictions = format_nationalize_info(nationalize_output)
-        nationalize_formatted = []
-        for entry in nationalize_predictions:
-            formatted_string = (
-                f"{entry['country_name']} - predicted likelihood: "
-                f"{entry['probability'] * 100:.2f}%"
-            )
-            nationalize_formatted.append(formatted_string)
-
-    return [
-        get_name_meaning(name, gender),
-        *nationalize_formatted,
-        genderize(name),
-        agify(name)
-    ]
+    return first_name, last_name
