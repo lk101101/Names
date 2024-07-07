@@ -88,7 +88,7 @@ def simple_line_chart(df):
         y=alt.Y('Births:Q', title='Number of Births'),
         tooltip=['Year:Q', 'Births:Q']
     ).properties(
-        width=1000,
+        width=800,
         height=400
     ).interactive(bind_x=True)
     return chart
