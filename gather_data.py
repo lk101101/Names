@@ -15,7 +15,7 @@ import pandas as pd
 
 def download_zip_files():
     """
-    Downloads and unzips name files from SSA. 
+    Download and unzip name files from SSA. 
     """
     url = "https://www.ssa.gov/oact/babynames/names.zip"
     zip_file_path = 'names.zip'
@@ -31,6 +31,8 @@ def download_zip_files():
     except requests.exceptions.RequestException as e:
         return f"An error occurred while making the request: {e}"
 
+    os.makedirs(extract_file_path, exist_ok=True)
+
     with open(zip_file_path, 'wb') as f:
         f.write(r.content)
 
@@ -41,11 +43,18 @@ def download_zip_files():
 
 
 def download_surnames():
+    """
+    Download top 1000 surnames from US Census.
+    """
 
     url = "https://www2.census.gov/topics/genealogy/2010surnames/Names_2010Census_Top1000.xlsx"
 
     file_path = "surnames.xlsx"
-    output_path = 'names_files/surnames.csv'
+    output_dir = 'names_files'
+    output_file = 'surnames.csv'
+    output_path = os.path.join(output_dir, output_file)
+
+    os.makedirs(output_dir, exist_ok=True)
 
     try:
         r = requests.get(url, timeout=10)
@@ -108,8 +117,9 @@ def main():
     Main function.
     """
 
-    # download_zip_files()
+    download_zip_files()
     download_surnames()
+    # ** Uncomment to download number of Social Security card holders by year and gender
     # scrape_ssa()
 
 
