@@ -47,7 +47,7 @@ Enter a first name, gender, start year, and end year to visualize the popularity
 
 - In your Terminal, run `git clone https://github.com/lk101101/Names` to clone this repo into your directory
 - Navigate to the new folder called Names
-- Create a Python environment (i.e. `python3 -m venv env`, then `source env/bin/activate`)
+- Create a Conda environment from environment.yml file: `conda env create -f environment.yml`, then `conda activate abc`. A requirements.txt file is also included.
 - Download required packages: `pip install -r requirements.txt`
 - Download and unzip required datasets: `python gather_data.py`(see 'Data').
 - Run `flask run` to start the Flask server.
