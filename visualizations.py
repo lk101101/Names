@@ -10,7 +10,8 @@ import names
 
 def get_country_id(country_name):
     """
-    Get the numeric country code for a given country name according to ISO 3166-1.
+    Get the numeric country code for a given country name 
+    using ISO 3166-1 alpha-2 codes.
 
     input:
         country_name: string
@@ -39,10 +40,7 @@ def create_nationalize_map(name):
         if country_id:
             prediction['id'] = int(country_id)
 
-    # Create a DataFrame from the processed predictions
     df = pd.DataFrame([p for p in predictions if 'id' in p])
-
-    print(df)
 
     countries_geojson = alt.topo_feature(data.world_110m.url, 'countries')
 
