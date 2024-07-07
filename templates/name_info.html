@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container my-5">
   <h1 class="display-5">Get Information for a Name</h1>
+  <p class="lead">Enter a first name (Emma) or a full name (Emma Smith)</p>
   <form action="/name_information" method="post" class="my-3">
     <div class="mb-3">
       <input type="text" class="form-control" name="name" placeholder="Name" required />
@@ -19,7 +20,8 @@
 
   <!-- Check if inputs have been passed to the template -->
   {% if texts %}
-  <h2 class="mt-4"">Name Information for '{{ request.form['name'].capitalize() }}'</h2>
+  <h2 class="mt-4"">Name Information for <span style="color: blue;">{{ request.form['name'].capitalize() }}</span>
+  </h2> 
   <ul class="list-group mb-4">
     {% for text in texts %}
     <li class="list-group-item">{{ text }}</li>
