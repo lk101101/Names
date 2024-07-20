@@ -10,7 +10,7 @@ import names
 
 def get_country_id(country_name):
     """
-    Get the numeric country code for a given country name 
+    Get the numeric country code for a given country name
     using ISO 3166-1 alpha-2 codes.
 
     input:
@@ -26,11 +26,12 @@ def get_country_id(country_name):
 
 def create_nationalize_map(name):
     """
-    Create a world map visualization that shows the probabilities (in percentages) of a given name being from different countries.
+    Create a world map visualization that shows the predicted countries of origin
+    of a given name.
 
     input:
         name: string
-    output: 
+    output:
         choropleth world map showcasing the five most probable countries of origin for a given name
     """
     predictions = names.nationalize(name)
@@ -53,7 +54,7 @@ def create_nationalize_map(name):
         stroke='black'
     ).encode(
         color=alt.Color('probability:Q',
-                        legend=alt.Legend(title="Probability")),
+                        legend=alt.Legend(title="Probability", format='%')),
         tooltip=[
             alt.Tooltip('country_id:N', title='Country'),
             alt.Tooltip('probability:Q', title='Probability', format='.2%')

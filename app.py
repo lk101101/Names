@@ -5,7 +5,8 @@ Routes:
 - /: home page
 - /data_visualizations: interactive data visualizations based on name popularity
 - /random_name: generates random names based on user input (gender, number of names, surname)
-- /name_information: provides name information and world map visualization displaying potential countries of origin
+- /name_information: provides name information and world map visualization 
+displaying potential countries of origin
 
 """
 from flask import Flask, request, render_template
@@ -81,7 +82,7 @@ def name_information():
     Output:
     - Rendered 'name_info.html' template with:
           - 'texts': information about the name scraped from NameBerry
-          - 'world_map_json': world map visualization displaying five most probable countries of origin for the name
+          - 'world_map_json': world map visualization displaying five predicted countries of origin
           - 'spotify_data': first song title matching name from Spotify API
 
     """
