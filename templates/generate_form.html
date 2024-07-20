@@ -1,60 +1,54 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container my-5">
-	<h1 class="display-5">Generate a Random Name</h1>
-	<form method="post" action="/random_name" class="my-3">
-		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<select name="gender" class="form-select">
-				<option value="">Any gender</option>
-				<option value="m">Male</option>
-				<option value="f">Female</option>
-			</select>
-		</div>
-		<div class="mb-3">
-			<label for="name" class="form-label">Number of names</label>
-			<input type="number" class="form-control" name="num_names" placeholder="Number of names to generate" min="1" max="100"
-				required>
-		</div>
-		<div class="mb-3">
-			<label for="name" class="form-label">Option to generate surnames</label>
-			<select name="surname" class="form-select">
-				<option value="">No surname</option>
-				<option value="yes">Surname</option>
-			</select>
-		</div>
-		<button type="submit" class="btn btn-primary">Generate names</button>
-	</form>
+  <h1 class="display-5">Generate a Random Name</h1>
+  <form method="post" action="/random_name" class="my-3">
+    <div class="mb-3">
+      <label for="gender" class="form-label">Select gender</label>
+      <select name="gender" id="gender" class="form-select">
+        <option value="">Any gender</option>
+        <option value="m">Male</option>
+        <option value="f">Female</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="numberOfNames" class="form-label">Select number of names to generate</label>
+      <input type="number" id="numberOfNames" class="form-control" name="num_names"
+        placeholder="Number of names to generate" min="1" max="100" required />
+    </div>
+    <div class="mb-3">
+      <label for="surname" class="form-label">Generate surnames</label>
+      <select name="surname" id="surname" class="form-select">
+        <option value="">No surname</option>
+        <option value="yes">Surname</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Generate names</button>
+  </form>
 
-	<!-- Check if names have been passed to the template -->
-	{% if names %}
-	<!-- Format query -->
-	{% if request.form['gender'] == 'm' %}
-		{% set gender_text = 'male' %}
-	{% elif request.form['gender'] == 'f' %}
-		{% set gender_text = 'female' %}
-	{% else %}
-		{% set gender_text = '' %}
-	{% endif %}
-	{% set surname_text = 'with surnames' if request.form['surname'] == 'yes' else '' %}
-	{% set name_count = request.form['num_names'] %}
-	
-	<h2 class="mt-4">Generated
-		<span style="color: blue;">{{ name_count }}</span>
-		{% if gender_text %}
-		<span style="color: blue;">{{ gender_text }}</span>
-		{% endif %}
-		{{ 'name' if name_count|int == 1 else 'names' }}
-		<span style="color: blue;">{{ surname_text }}</span>
-	</h2>
+  <!-- Check if names have been passed to the template -->
+  {% if names %}
+  <!-- Format query -->
+  {% if request.form['gender'] == 'm' %} {% set gender_text = 'male' %} {% elif
+  request.form['gender'] == 'f' %} {% set gender_text = 'female' %} {% else %}
+  {% set gender_text = '' %} {% endif %} {% set surname_text = 'with surnames'
+  if request.form['surname'] == 'yes' else '' %} {% set name_count =
+  request.form['num_names'] %}
 
-	<!-- List generated names -->
-	<ul class="list-group">
-		{% for name in names %}
-		<li class="list-group-item">{{ name }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-	</div>
-	{% endblock %}
+  <h2 class="mt-4">
+    Generated
+    <span style="color: blue">{{ name_count }}</span>
+    {% if gender_text %}
+    <span style="color: blue">{{ gender_text }}</span>
+    {% endif %} {{ 'name' if name_count|int == 1 else 'names' }}
+    <span style="color: blue">{{ surname_text }}</span>
+  </h2>
+
+  <!-- List generated names -->
+  <ul class="list-group">
+    {% for name in names %}
+    <li class="list-group-item">{{ name }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

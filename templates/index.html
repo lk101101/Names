@@ -1,27 +1,34 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container text-center mt-5">
   <h1 class="display-4">The Name App</h1>
 
   <!-- Random Name Generator -->
   <div class="mt-4">
-    <h2><button type="button" class="btn btn-primary" onclick="location.href='/random_name'">Generate a Random
-        Name</button></h2>
+    <h2>
+      <button type="button" class="btn btn-primary" onclick="location.href='/random_name'">
+        Generate a Random Name
+      </button>
+    </h2>
     <p>Generate random first and last names!</p>
   </div>
 
   <!-- Name Information -->
   <div class="mt-4">
-    <h2><button type="button" class="btn btn-primary" onclick="location.href='/name_information'">Get Name
-        Information</button></h2>
+    <h2>
+      <button type="button" class="btn btn-primary" onclick="location.href='/name_information'">
+        Get Name Information
+      </button>
+    </h2>
     <p>Retrieve information about a name's meaning, origin, and more!</p>
   </div>
 
   <!-- Visualizations -->
   <div class="mt-4">
-    <h2><button type="button" class="btn btn-primary" onclick="location.href='/data_visualizations'">Create
-        Visualizations</button></h2>
+    <h2>
+      <button type="button" class="btn btn-primary" onclick="location.href='/data_visualizations'">
+        Create Visualizations
+      </button>
+    </h2>
     <p>Learn more about the popularity of a name of your choice!</p>
   </div>
 
@@ -39,6 +46,5 @@
       </li>
     </ul>
   </footer> -->
-
 </div>
 {% endblock %}

@@ -1,17 +1,13 @@
-{% extends "base.html" %}
-
-{% block content %}
-<div class="container my-5">
+{% extends "base.html" %} {% block content %}
+<main class="container my-5">
   <h1 class="display-5">Get Information for a Name</h1>
-  <p class="lead">Enter a first name (Emma) or a full name (Emma Smith)</p>
-  <form action="/name_information" method="post" class="my-3">
-    <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" name="name" placeholder="Enter first or full name" required />
+  <form action="/name_information" method="post" class="mb-3">
+    <label for="name" class="form-label">Enter a first name (Emma) or a full name (Emma Smith)</label>
+    <input type="text" id="name" class="form-control" name="name" placeholder="Enter name" required />
     </div>
     <div class="mb-3">
       <label for="gender" class="form-label">Gender</label>
-      <select name="gender" class="form-select" required>
+      <select name="gender" id="gender" class="form-select" required>
         <option value="" selected disabled hidden>Select a gender</option>
         <option value="boy">Boy</option>
         <option value="girl">Girl</option>
@@ -22,35 +18,32 @@
 
   <!-- Check if inputs have been passed to the template -->
   {% if texts %}
-  <h2 class="mt-4"">Name Information for <span style="color: blue;">{{ request.form['name'].capitalize() }}</span>
-  </h2> 
+  <h2 class="mt-4">
+    Name Information for
+    <span style="color: blue">{{ request.form['name'].capitalize() }}</span>
+  </h2>
   <ul class="list-group mb-4">
     {% for text in texts %}
     <li class="list-group-item">{{ text }}</li>
     {% endfor %}
   </ul>
 
-  {# TODO: uncomment for Spotify integration
-  {% for key, value in spotify_data.items() %}
-  <div> {{ key }}: {{ value }} </div>
-  {% endfor %}
-  #}
+  {# TODO: uncomment for Spotify integration {% for key, value in
+  spotify_data.items() %}
+  <div>{{ key }}: {{ value }}</div>
+  {% endfor %} #} {% if world_map_json != '{}' %}
+  <!-- Container for the visualization -->
+  <div id="world_map"></div>
 
-  {% if world_map_json != '{}' %}
-    <!-- Container for the visualization -->
-    <div id="world_map"></div>
+  {% block scripts %}
+  <script type="text/javascript">
+    var worldMapJson = {{ world_map_json | safe }};
 
-    {% block scripts %}
-    <script type="text/javascript">
-      var worldMapJson = {{ world_map_json | safe }};
-
-      if (worldMapJson && JSON.stringify(worldMapJson) !== '{}') {
-        var chart_spec = worldMapJson;
-        vegaEmbed('#world_map', chart_spec);
-      }
-    </script>
-    {% endblock %}
-    {% endif %}
-  {% endif %}
+    if (worldMapJson && JSON.stringify(worldMapJson) !== '{}') {
+      var chart_spec = worldMapJson;
+      vegaEmbed('#world_map', chart_spec);
+    }
+  </script>
+  {% endblock %} {% endif %} {% endif %}
   </div>
-{% endblock %}
+  {% endblock %}
