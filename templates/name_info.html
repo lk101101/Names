@@ -2,10 +2,11 @@
 <main class="container my-5">
   <h1 class="display-5">Get Information for a Name</h1>
   <form action="/name_information" method="post" class="mb-3">
-    <label for="name" class="form-label">Enter a first name (Emma) or a full name (Emma Smith)</label>
-    <input type="text" id="name" class="form-control" name="name" placeholder="Enter name" required />
-    </div>
     <div class="mb-3">
+      <label for="name" class="form-label">Enter a first name (Emma) or a full name (Emma Smith)</label>
+      <input type="text" id="name" class="form-control" name="name" placeholder="Enter name" required />
+    </div>
+    <div class="mb-3 mt-4">
       <label for="gender" class="form-label">Gender</label>
       <select name="gender" id="gender" class="form-select" required>
         <option value="" selected disabled hidden>Select a gender</option>
@@ -17,16 +18,66 @@
   </form>
 
   <!-- Check if inputs have been passed to the template -->
-  {% if texts %}
+  {% if name_meaning and nationalize and genderize and agify %}
   <h2 class="mt-4">
     Name Information for
     <span style="color: blue">{{ request.form['name'].capitalize() }}</span>
   </h2>
-  <ul class="list-group mb-4">
-    {% for text in texts %}
-    <li class="list-group-item">{{ text }}</li>
-    {% endfor %}
-  </ul>
+  <div class="card mb-4">
+    <div class="card-header">
+      Name Meaning
+    </div>
+    <div class="card-body">
+      <p>{{ name_meaning }}</p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      Predicted Nationalities
+    </div>
+    <ul class="list-group list-group-flush">
+      {% if nationalize[1] is none %}
+      <p class="list-group-item d-flex justify-content-between align-items-center">{{ nationalize[0][0] }}</p>
+      {% else %}
+      {% for result in nationalize %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <p>Country: <strong>{{ result[0] }}</strong>
+          | Probability: <strong>{{ result[1] }}%</strong></p>
+      </li>
+      {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+
+  <!-- Predicted Gender -->
+  <div class="card mb-4">
+    <div class="card-header">
+      Predicted Gender
+    </div>
+    <div class="card-body">
+      {% if genderize is string %}
+      <p>{{ genderize }}</p>
+      {% else %}
+      <p>Gender: <strong>{{ genderize[0] }}</strong></p>
+      <p>Probability: <strong>{{ genderize[1] }}%</strong></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Predicted Age -->
+  <div class="card mb-4">
+    <div class="card-header">
+      Predicted Age
+    </div>
+    <div class="card-body">
+      {% if agify is string %}
+      <p>{{ agify }}</p>
+      {% else %}
+      <p><strong>{{ agify }} years old</strong></p>
+      {% endif %}
+    </div>
+  </div>
 
   {# TODO: uncomment for Spotify integration {% for key, value in
   spotify_data.items() %}

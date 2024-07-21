@@ -221,25 +221,21 @@ def get_formatted_nationality(last_name):
     input:
         last_name: string
     output:
-        list containing formatted nationality predictions or  error message
+        list containing formatted nationality predictions or error message
     """
     nationalize_output = nationalize(last_name)
 
     # check if output is error
     if not isinstance(nationalize_output, list):
-        return [nationalize_output]
+        return [(nationalize_output,)]
 
     # reformat data to be readable strings
     nationalize_predictions = get_country_codes(nationalize_output)
-    nationalize_formatted = []
-    for entry in nationalize_predictions:
-        formatted_string = (
-            f"{entry['country_name']} - predicted likelihood: "
-            f"{entry['probability'] * 100:.2f}%"
-        )
-        nationalize_formatted.append(formatted_string)
+    nationalize_tuples = [
+        (entry['country_name'], round(entry['probability'] * 100, 2))
+        for entry in nationalize_predictions]
 
-    return nationalize_formatted
+    return nationalize_tuples
 
 
 def genderize(name):
@@ -264,11 +260,10 @@ def genderize(name):
         return f"An error occurred (Genderize API): {e}"
 
     data = response.json()
-    gender_info = (
-        f"Predicted gender: {data.get('gender', 'unknown')} - "
-        f"probability: {round(data.get('probability', 0) * 100, 2)}%"
-    )
-    return gender_info
+    gender = data.get('gender', 'unknown')
+    probability = data.get('probability', 0) * 100
+
+    return (gender, round(probability, 2))
 
 
 def agify(name):
@@ -293,8 +288,8 @@ def agify(name):
 
     data = response.json()
     age = data.get('age', 'unknown')
-    return (f"Predicted age: {age}" if age != "unknown"
-            else f"Error: No age prediction for name {name}.")
+
+    return age
 
 
 def spotify_track(name):

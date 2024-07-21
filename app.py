@@ -87,7 +87,10 @@ def name_information():
 
     """
     template_data = {
-        "texts": "",
+        "name_meaning": "",
+        "nationalize": [],
+        "genderize": (),
+        "agify": "",
         # ** Uncomment for Spotify API data
         # "spotify_data": {},
         "world_map_json": "{}",
@@ -100,13 +103,11 @@ def name_information():
         # get first and last names if provided
         first, last = names.split_full_name(name)
 
-        name_meaning = names.get_name_meaning(first, gender)
-        nationalize_results = names.get_formatted_nationality(last)
-        gender_predictions = names.genderize(first)
-        age_prediction = names.agify(first)
+        template_data["name_meaning"] = names.get_name_meaning(first, gender)
+        template_data["nationalize"] = names.get_formatted_nationality(last)
+        template_data["genderize"] = names.genderize(first)
+        template_data["agify"] = names.agify(first)
 
-        template_data["texts"] = [name_meaning, *
-                                  nationalize_results, gender_predictions, age_prediction]
         # ** Uncomment to display song matching name from Spotify API
         # template_data["spotify_data"] = names.spotify_track(name)
 
