@@ -5,7 +5,7 @@
     <div class="mb-3">
       <label for="gender" class="form-label">Gender</label>
       <select name="gender" id="gender" class="form-select">
-        <option value="">Any gender</option>
+        <option value="" selected>Any gender</option>
         <option value="m">Male</option>
         <option value="f">Female</option>
       </select>
@@ -13,12 +13,12 @@
     <div class="mb-3">
       <label for="numberOfNames" class="form-label">Number of names to generate</label>
       <input type="number" id="numberOfNames" class="form-control" name="num_names"
-        placeholder="Number of names to generate" min="1" max="100" required />
+        placeholder="Number of names to generate" min="1" max="100" value="5" required />
     </div>
     <div class="mb-3">
       <label for="surname" class="form-label">Surnames</label>
       <select name="surname" id="surname" class="form-select">
-        <option value="">No surname(s)</option>
+        <option value="" selected>No surname(s)</option>
         <option value="yes">Surname(s)</option>
       </select>
     </div>
