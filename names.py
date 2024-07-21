@@ -221,7 +221,7 @@ def get_formatted_nationality(last_name):
     input:
         last_name: string
     output:
-        list containing formatted nationality predictions or error message
+        list containing formatted nationality predictions or error message as tuples
     """
     nationalize_output = nationalize(last_name)
 
@@ -245,7 +245,8 @@ def genderize(name):
     input:
         name: string
     output:
-        string containing predicted gender or error message
+        tuple containing predicted gender or error message
+        and probability
     """
 
     try:
