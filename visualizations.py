@@ -114,7 +114,7 @@ def popularity_heatmap(df):
     threshold = df['Births'].quantile(0.85)
 
     select_checkbox = alt.param(
-        bind=alt.binding_checkbox(name="Show grid and labels"),
+        bind=alt.binding_checkbox(name="Show grid and labels  "),
     )
 
     heatmap = alt.Chart(df).mark_rect().encode(
