@@ -23,23 +23,27 @@ US Census Bureau [Top 1000 surnames](https://www.census.gov/topics/population/ge
 <img width="653" alt="image of homepage containing page links to generate names, retrieve name information, and visualize a name's popularity" src="https://github.com/lk101101/Names/assets/55768135/4676ff10-2f3e-446c-bcd4-37f6dce78512">
 
 ## Generating random names
+<img width="1187" alt="image of webpage to generate random name featuring a completed query and list of random names" src="https://github.com/user-attachments/assets/9a230d4e-0099-4c1b-a45e-0e8b7653f8f5">
 
-<img width="1163" alt="image of webpage to generate random name featuring a completed query and list of random names" src="https://github.com/lk101101/Names/assets/55768135/3c810ff6-c03d-4ef2-b544-136a8f710074">
 
 Return a specified number of random names with options to limit the gender to male or female and to generate random surnames.
 
 ## Get name information
+<img width="1166" alt="image of webpage to retrieve name information" src="https://github.com/user-attachments/assets/fb5a18f2-8ac3-42ba-ba43-a1d31028dda8">
+<img width="1152" alt="image of completed query for name information about the name Emma Smith" src="https://github.com/user-attachments/assets/79d287af-8373-4471-a41f-60251b9d163a">
+<img width="1162" alt="image of predicted nationality, age, and gender of the name Emma Smith" src="https://github.com/user-attachments/assets/8496a4d6-c4b5-4cbc-9c66-347e3421a851">
+<img width="1064" alt="image of visualization displaying predicted nationalities on map with countries in different colors" src="https://github.com/user-attachments/assets/dc436ba0-dfb3-463a-a3c6-c40e420bfc3c">
 
-<img width="979" alt="image of webpage to retrieve name information featuring a completed query for Emma Smith and a paragraph about the name Emma" src="https://github.com/lk101101/Names/assets/55768135/14d0f553-86d6-4d35-9db0-05d09bad510d">
-<img width="1022" alt="image of webpage to retrieve name information featuring list of predictions of the name's nationality, age, and gender along with a world map" src="https://github.com/lk101101/Names/assets/55768135/6622f554-a44a-4cf4-9e10-422c2e353340">
+
+
 
 Enter either a first name or a full name (first and last) to gather information about a name from [Nameberry](https://nameberry.com/) and retrieve the name's predicted nationalities, gender, and age using the [Nationalize](https://nationalize.io/documentation), [Genderize](https://genderize.io/documentation), and [Agify](https://agify.io/documentation) APIs. The predicted nationalities are highlighted on a world map.
 
 > note: Nationalize uses last names while the other APIs use first names. If a last name is not provided, the code will use the first name which may lead to inaccurate predictions.
 
 ## Create visualizations of a name's popularity
-
-<img width="703" alt="image of webpage to visualize name popularity featuring a scatterplot and a heatmap" src="https://github.com/lk101101/Names/assets/55768135/19a6fbcd-1e75-4d98-a234-1b2a44070b2e">
+<img width="1155" alt="image of webpage to visualize name popularity" src="https://github.com/user-attachments/assets/fb373101-f5f3-4758-88cb-c37cb3da9dec">
+<img width="711" alt="image of scatterplot and heatmap for the popularity of the name Emma" src="https://github.com/user-attachments/assets/1737adcc-7186-45db-8b4f-539073694c76">
 
 Enter a first name, gender, start year, and end year to visualize the popularity (number of babies with that name each year in the given range) with a scatterplot and a heatmap.
 
