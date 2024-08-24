@@ -8,20 +8,21 @@ import pycountry
 import names
 
 
-def get_country_id(country_name):
+def get_country_info(country_code):
     """
-    Get the numeric country code for a given country name
+    Get the numeric country code and full name for a given country code
     using ISO 3166-1 alpha-2 codes.
 
     input:
-        country_name: string
+        country_code: ISO 3166-1 alpha-2 code
     output:
-        numeric country code or None: string
+        tuple of numeric country code and full country name or (None, None): (string, string)
     """
     try:
-        return pycountry.countries.get(alpha_2=country_name).numeric
+        country = pycountry.countries.get(alpha_2=country_code)
+        return country.numeric, country.name
     except LookupError:
-        return None
+        return None, None
 
 
 def create_nationalize_map(name):
@@ -37,32 +38,35 @@ def create_nationalize_map(name):
     predictions = names.nationalize(name)
 
     for prediction in predictions:
-        country_id = get_country_id(prediction['country_id'])
+        country_id, country_name = get_country_info(prediction['country_id'])
         if country_id:
             prediction['id'] = int(country_id)
+            prediction['country_name'] = country_name
 
+    # Filter the DataFrame to only keep entries with valid IDs
     df = pd.DataFrame([p for p in predictions if 'id' in p])
 
     countries_geojson = alt.topo_feature(data.world_110m.url, 'countries')
 
-    # world map background in grey
+    # World map background in grey
     world_map = alt.Chart(countries_geojson).mark_geoshape(
         fill='lightgrey',
     )
-    # chart for colored countries
+
+    # Chart for colored countries
     probability_layer = alt.Chart(countries_geojson).mark_geoshape(
         stroke='black'
     ).encode(
         color=alt.Color('probability:Q',
                         legend=alt.Legend(title="Probability", format='%')),
         tooltip=[
-            alt.Tooltip('country_id:N', title='Country'),
+            alt.Tooltip('country_name:N', title='Country'),
             alt.Tooltip('probability:Q', title='Probability', format='.2%')
         ]
     ).transform_lookup(
         lookup='id',
         from_=alt.LookupData(data=df, key='id', fields=[
-                             'country_id', 'probability'])
+                             'country_name', 'probability'])
     ).project(
         'equirectangular'
     ).properties(
