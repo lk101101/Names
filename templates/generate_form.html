@@ -44,11 +44,15 @@
   </h2>
 
   <!-- List generated names -->
-  <ul class="list-group">
-    {% for name in names %}
-    <li class="list-group-item">{{ name }}</li>
-    {% endfor %}
-  </ul>
+  <table class="table table-striped">
+    <tbody>
+      {% for name in names %}
+      <tr>
+        <td>{{ name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% endif %}
 </main>
 {% endblock %}
