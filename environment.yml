@@ -23,7 +23,7 @@ dependencies:
   - python=3.12.1=h9f0c242_1_cpython
   - requests=2.31.0=pyhd8ed1ab_0
   - setuptools=68.2.2=py312hecd8cb5_0
-  - urllib3=2.2.0=pyhd8ed1ab_0
+  - urllib3=2.2.2=pyhd8ed1ab_0
   - vega_datasets=0.9.0=pyhd3deb0d_0
   - yaml=0.2.5=h0d85af4_2
   - pip:
